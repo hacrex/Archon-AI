@@ -14,10 +14,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/api"
-	"github.com/hacrex/Archon-Base/internal/auth"
-	"github.com/hacrex/Archon-Base/internal/provision"
-	"github.com/hacrex/Archon-Base/internal/store"
+	"github.com/hacrex/Archon-AI/internal/api"
+	"github.com/hacrex/Archon-AI/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/provision"
+	"github.com/hacrex/Archon-AI/internal/store"
 )
 
 // Version is overridden at build time with -ldflags.
@@ -367,11 +367,23 @@ func (s *Server) projects(w http.ResponseWriter, r *http.Request) {
 		writeValidationError(w, err)
 		return
 	}
+	principal, hasPrincipal := principalFromContext(r.Context())
+	if hasPrincipal {
+		if creator, configured := s.store.(store.ProjectCreationStore); configured {
+			if err := creator.CreateProjectWithMembership(r.Context(), &project, principal.UserID, principal.Role); err != nil {
+				s.writeStoreError(w, err)
+				return
+			}
+			w.Header().Set("Location", "/v1/projects/"+project.Metadata.Name)
+			writeJSON(w, http.StatusCreated, project)
+			return
+		}
+	}
 	if err := s.store.CreateProject(r.Context(), &project); err != nil {
 		s.writeStoreError(w, err)
 		return
 	}
-	if principal, ok := principalFromContext(r.Context()); ok {
+	if hasPrincipal {
 		if memberships, configured := s.store.(store.ProjectMembershipStore); configured {
 			if err := memberships.GrantProjectMembership(r.Context(), principal.UserID, principal.Organization, project.Metadata.Name, principal.Role); err != nil {
 				writeError(w, http.StatusInternalServerError, "membership_grant_failed", "project was created but creator access could not be granted")
@@ -606,6 +618,13 @@ func (s *Server) databaseResource(w http.ResponseWriter, r *http.Request, projec
 		if err := s.store.DeleteDatabaseInstance(r.Context(), projectName, name); err != nil {
 			s.writeStoreError(w, err)
 			return
+		}
+		if s.provisioner != nil {
+			instance := &api.DatabaseInstance{Metadata: api.Metadata{Project: projectName, Name: name}, Spec: api.DatabaseSpec{Engine: "qdrant"}}
+			if err := s.provisioner.Delete(r.Context(), instance); err != nil {
+				writeError(w, http.StatusInternalServerError, "deprovision_failed", "database instance was deleted but its backing collection could not be removed")
+				return
+			}
 		}
 		w.WriteHeader(http.StatusAccepted)
 	default:

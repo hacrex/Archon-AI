@@ -28,9 +28,25 @@ func (r MigrationRunner) Run(ctx context.Context, database *sql.DB) error {
 	if err != nil {
 		return err
 	}
+	// Serialize concurrent migration runners (multiple API replicas starting
+	// at once) on a session-level advisory lock. Locks are released when the
+	// connection closes, so a crashed runner cannot block startup forever.
+	conn, err := database.Conn(ctx)
+	if err != nil {
+		return fmt.Errorf("acquire migration connection: %w", err)
+	}
+	defer conn.Close()
+	if _, err := conn.ExecContext(ctx, `SELECT pg_advisory_lock(hashtext('archon_migrations'))`); err != nil {
+		return fmt.Errorf("acquire migration lock: %w", err)
+	}
+	defer func() {
+		_, _ = conn.ExecContext(context.WithoutCancel(ctx), `SELECT pg_advisory_unlock(hashtext('archon_migrations'))`)
+	}()
 	for _, m := range migrations {
 		var applied bool
-		if err := database.QueryRowContext(ctx, `SELECT EXISTS (SELECT 1 FROM schema_migrations WHERE version = $1)`, m.version).Scan(&applied); err != nil {
+		// Use the locked connection so the check and the migration apply run
+		// on the same session that holds the advisory lock.
+		if err := conn.QueryRowContext(ctx, `SELECT EXISTS (SELECT 1 FROM schema_migrations WHERE version = $1)`, m.version).Scan(&applied); err != nil {
 			return fmt.Errorf("check migration %s: %w", m.version, err)
 		}
 		if applied {

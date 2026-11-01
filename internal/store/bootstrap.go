@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hacrex/Archon-Base/internal/api"
-	"github.com/hacrex/Archon-Base/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/api"
+	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
 var ErrAlreadyExists = errors.New("resource already exists")
@@ -35,7 +35,7 @@ func (r *Repository) BootstrapUser(ctx context.Context, email, displayName, pass
 	defer tx.Rollback()
 	if _, err := tx.ExecContext(ctx, `
 		INSERT INTO organizations (id, slug, name)
-		VALUES ($1::uuid, 'local', 'Archon Base Organization')
+		VALUES ($1::uuid, 'local', 'Archon AI Organization')
 		ON CONFLICT (id) DO NOTHING`, r.organizationID); err != nil {
 		return api.User{}, api.Membership{}, fmt.Errorf("create product organization: %w", err)
 	}

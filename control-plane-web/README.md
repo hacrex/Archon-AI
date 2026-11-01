@@ -1,6 +1,6 @@
-# Archon Base Control Plane UI
+# Archon AI Control Plane UI
 
-This is the first local UI slice for the Archon Base product control plane. It is a dependency-free, route-aware dashboard preview that establishes the application shell and information architecture before authentication and API wiring.
+This is the first local UI slice for the Archon AI product control plane. It is a dependency-free, route-aware dashboard preview that establishes the application shell and information architecture before authentication and API wiring.
 
 ## Run locally
 
@@ -38,4 +38,4 @@ src/app.js         hash routing and interaction handlers
 
 The preview uses clearly labeled local preview data. It does not submit mutations, authenticate users, or imply that planned agent, model, GPU, MCP, or cluster capabilities are shipped. The Projects view now shows project capacity and quota context, while Resource Allocation provides a read-only request/limit management surface. The control-plane backend now has a PostgreSQL identity/membership foundation, but authentication and authorization must be added before exposing member-management mutations. The next UI slice should connect Project and DatabaseInstance routes to the API, then replace the local member preview with authenticated organization administration.
 
-The structure follows the comparison notes: Archon Base is the infrastructure control plane below application builders such as Supabase-backed applications, Appwrite applications, Open WebUI, Dify, and Langflow. It is not a replacement chat UI or general application backend.
+The structure follows the comparison notes: Archon AI is the infrastructure control plane below application builders such as Supabase-backed applications, Appwrite applications, Open WebUI, Dify, and Langflow. It is not a replacement chat UI or general application backend.

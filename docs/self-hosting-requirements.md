@@ -1,10 +1,10 @@
 # Self-hosting Requirements
 
-Archon Base is designed to run on infrastructure you control, from a small local learning machine to a multi-node private AI cloud.
+Archon AI is designed to run on infrastructure you control, from a small local learning machine to a multi-node private AI cloud.
 
 ## Enthusiast / K3s practice tier
 
-This is the recommended starting point for students and enthusiasts who want to practice self-hosting, Kubernetes concepts, K3s operations, and the Archon Base control plane on one machine.
+This is the recommended starting point for students and enthusiasts who want to practice self-hosting, Kubernetes concepts, K3s operations, and the Archon AI control plane on one machine.
 
 | Resource | Minimum practice profile |
 |---|---:|

@@ -1,4 +1,4 @@
-# Archon Base Implementation TODO
+# Archon AI Implementation TODO
 
 **Goal:** Ship a reliable Phase 1 local vertical slice before expanding into Kubernetes, multiple engines, or enterprise features.
 

@@ -6,7 +6,7 @@ This change converts the repository from an unversioned design scaffold into a r
 
 ## Changes
 
-- Replace `github.com/your-org/archon-base` with the repository module path.
+- Replace `github.com/your-org/archon-ai` with the repository module path.
 - Add `make fmt-check` and make `make fmt` operate on explicit Go files.
 - Add `LICENSE` with Apache-2.0 terms and update README licensing.
 - Add `docs/core-v1-resource-schema.md`.

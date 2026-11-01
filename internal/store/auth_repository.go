@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
 // AuthRepository is the authentication and organization-membership contract

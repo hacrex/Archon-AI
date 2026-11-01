@@ -80,9 +80,9 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v4
       - name: Helm lint
-        run: helm lint deploy/helm/archon-base
+        run: helm lint deploy/helm/archon-ai
       - name: Helm template
-        run: helm template archon-base deploy/helm/archon-base >/tmp/archon-rendered.yaml
+        run: helm template archon-ai deploy/helm/archon-ai >/tmp/archon-rendered.yaml
       - name: Compose config
         run: docker compose -f deploy/docker-compose.yml config >/tmp/archon-compose.yaml
 

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/api"
-	"github.com/hacrex/Archon-Base/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/api"
+	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
 var ErrNotFound = errors.New("resource not found")
@@ -33,6 +33,13 @@ type ProjectMembershipStore interface {
 	ListProjectMemberships(context.Context, string, string) ([]api.ProjectMembership, error)
 	UpsertProjectMembership(context.Context, string, string, string, string, auth.Role) error
 	RevokeProjectMembership(context.Context, string, string, string, string) error
+}
+
+// ProjectCreationStore creates a project and the creator's initial project
+// membership in one transaction so a project can never exist without its
+// creator having access.
+type ProjectCreationStore interface {
+	CreateProjectWithMembership(context.Context, *api.Project, string, auth.Role) error
 }
 
 type Repository struct {
@@ -183,6 +190,64 @@ func (r *Repository) AuthorizeProject(ctx context.Context, userID, organizationI
 	}
 	if !allowed {
 		return ErrForbidden
+	}
+	return nil
+}
+
+// CreateProjectWithMembership inserts the project and the creator's project
+// membership atomically. Either both records commit or neither does.
+func (r *Repository) CreateProjectWithMembership(ctx context.Context, project *api.Project, creatorID string, creatorRole auth.Role) error {
+	if project == nil {
+		return errors.New("project is required")
+	}
+	if strings.TrimSpace(creatorID) == "" {
+		return errors.New("creator ID is required")
+	}
+	if _, err := auth.ParseRole(string(creatorRole)); err != nil {
+		return err
+	}
+	project.Normalize()
+	if err := project.Validate(); err != nil {
+		return err
+	}
+	labels, err := json.Marshal(project.Metadata.Labels)
+	if err != nil {
+		return fmt.Errorf("marshal project labels: %w", err)
+	}
+	annotations, err := json.Marshal(project.Metadata.Annotations)
+	if err != nil {
+		return fmt.Errorf("marshal project annotations: %w", err)
+	}
+	spec, err := json.Marshal(project.Spec)
+	if err != nil {
+		return fmt.Errorf("marshal project spec: %w", err)
+	}
+
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("begin project create: %w", err)
+	}
+	defer tx.Rollback()
+	const query = `
+		INSERT INTO projects (organization_id, name, display_name, description, environment, region, spec, labels, annotations, phase, generation)
+		VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9::jsonb, $10, $11)
+		RETURNING id::text, generation, created_at, updated_at`
+	var createdAt, updatedAt time.Time
+	if err := tx.QueryRowContext(ctx, query, r.organizationID, project.Metadata.Name, project.Spec.DisplayName, project.Spec.Description, project.Spec.Environment, project.Spec.Region, spec, labels, annotations, project.Status.Phase, project.Metadata.Generation).
+		Scan(&project.Metadata.UID, &project.Metadata.Generation, &createdAt, &updatedAt); err != nil {
+		return fmt.Errorf("insert project: %w", err)
+	}
+	project.Status.LastReconciledAt = &updatedAt
+	if err := insertOutbox(ctx, tx, "Project", project.Metadata.UID, "ProjectCreated", project); err != nil {
+		return err
+	}
+	if _, err := tx.ExecContext(ctx, `
+		INSERT INTO project_memberships (project_id, user_id, role)
+		VALUES ($1::uuid, $2::uuid, $3)`, project.Metadata.UID, creatorID, creatorRole); err != nil {
+		return fmt.Errorf("insert creator project membership: %w", err)
+	}
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit project create: %w", err)
 	}
 	return nil
 }

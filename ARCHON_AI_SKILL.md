@@ -1,16 +1,16 @@
-# Archon Base — Project Skill / Engineering Specification
+# Archon AI — Project Skill / Engineering Specification
 
-> **Project:** Archon Base  
+> **Project:** Archon AI  
 > **Purpose:** Self-hostable AI cloud platform / AI infrastructure control plane  
 > **Status:** Architecture baseline v1.1  
-> **Source:** Archon Base Technical Design v1.0 plus architecture review findings  
+> **Source:** Archon AI Technical Design v1.0 plus architecture review findings  
 > **Audience:** Human engineers, AI coding agents, platform engineers, security engineers, contributors
 
 ---
 
 ## 0. Purpose of This Skill File
 
-This file is the governing engineering context for implementing Archon Base.
+This file is the governing engineering context for implementing Archon AI.
 
 When working on this repository, an AI coding agent or engineer MUST:
 
@@ -30,7 +30,7 @@ If a proposed implementation conflicts with this file, stop and identify the con
 
 # 1. Product Definition
 
-Archon Base is an open-source, self-hostable backend and infrastructure platform for AI applications.
+Archon AI is an open-source, self-hostable backend and infrastructure platform for AI applications.
 
 It provides a unified control plane for:
 
@@ -59,7 +59,7 @@ The product should feel conceptually similar to a combination of:
 - self-hosted AI model gateway
 - AI infrastructure management layer
 
-Archon Base is NOT intended to become a new implementation of every underlying infrastructure component.
+Archon AI is NOT intended to become a new implementation of every underlying infrastructure component.
 
 ---
 
@@ -114,7 +114,7 @@ Every integration MUST sit behind an Archon abstraction where practical.
 ## 3.1 Logical Architecture
 
 ```text
-                         ARCHON BASE
+                         ARCHON AI
                               |
              +----------------+----------------+
              |                                 |
@@ -1771,7 +1771,7 @@ ADR-020 MVP Scope
 Recommended structure:
 
 ```text
-archon-base/
+archon-ai/
 │
 ├── cmd/
 │   ├── archon/
@@ -2123,7 +2123,7 @@ Do NOT:
 
 # 54. Architectural North Star
 
-Archon Base should ultimately provide this developer experience:
+Archon AI should ultimately provide this developer experience:
 
 ```text
 archon init my-agent
@@ -2166,7 +2166,7 @@ Platform engineers must still be able to access the underlying infrastructure wh
 
 # 55. Final Architectural Principle
 
-Archon Base should not attempt to replace Kubernetes, databases, inference engines, storage engines, workflow engines, or AI frameworks.
+Archon AI should not attempt to replace Kubernetes, databases, inference engines, storage engines, workflow engines, or AI frameworks.
 
 It should become the **control plane that makes these components feel like one coherent AI platform**.
 

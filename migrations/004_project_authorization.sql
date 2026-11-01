@@ -1,4 +1,4 @@
--- Archon Base project-scoped authorization, migration 004.
+-- Archon AI project-scoped authorization, migration 004.
 -- Organization owners/admins retain organization-wide access. Other users
 -- require an explicit membership row for each project they can access.
 

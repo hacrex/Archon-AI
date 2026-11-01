@@ -2,7 +2,7 @@
 
 ## Design decision
 
-Archon Base has two authorization scopes:
+Archon AI has two authorization scopes:
 
 1. **Organization scope** — the authenticated session carries the user's active organization and organization role.
 2. **Project scope** — access to a project is granted by `project_memberships`, unless the organization role is `owner` or `admin`.

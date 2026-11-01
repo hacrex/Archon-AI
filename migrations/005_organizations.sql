@@ -1,5 +1,5 @@
--- Archon Base product organization registry, migration 005.
--- This is metadata for the Archon Base installation, not an end-user vector
+-- Archon AI product organization registry, migration 005.
+-- This is metadata for the Archon AI installation, not an end-user vector
 -- database. Resources remain project-scoped inside this product database.
 
 CREATE TABLE organizations (

@@ -1,4 +1,4 @@
-module github.com/hacrex/Archon-Base
+module github.com/hacrex/Archon-AI
 
 go 1.22
 

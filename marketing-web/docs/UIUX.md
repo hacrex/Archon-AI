@@ -1,11 +1,11 @@
-# Archon Base Marketing Website — UI/UX Specification
+# Archon AI Marketing Website — UI/UX Specification
 
 ## Design Direction
 
 **Style:** Minimal Neo-Brutalism  
 **Personality:** Raw · Technical · Open · Bold · Controlled
 
-Archon Base should look like infrastructure software that happens to have a marketing website.
+Archon AI should look like infrastructure software that happens to have a marketing website.
 
 Avoid:
 - Generic AI gradients
@@ -74,7 +74,7 @@ Suggested scale:
 ## Header
 
 ```text
-ARCHON BASE       Platform  Architecture  Docs  GitHub       [ GET STARTED → ]
+ARCHON AI       Platform  Architecture  Docs  GitHub       [ GET STARTED → ]
 ```
 
 Height: 72px  
@@ -83,7 +83,7 @@ Sticky on desktop and mobile.
 
 Mobile:
 ```text
-ARCHON BASE                                      ☰
+ARCHON AI                                      ☰
 ```
 
 ## Homepage Sections
@@ -168,7 +168,7 @@ Headline:
 
 Architecture diagram:
 ```text
-                     ARCHON BASE
+                     ARCHON AI
                           │
        ┌──────────────────┼──────────────────┐
        │                  │                  │
@@ -206,7 +206,7 @@ Each block should contain:
 ```text
 APPLICATION
      ↓
-ARCHON BASE
+ARCHON AI
      ↓
 KUBERNETES DATA PLANE
      ↓
@@ -223,7 +223,7 @@ Show:
 ```text
 Open WebUI
       │
-Dify ─┼─ Archon Base ─ vLLM
+Dify ─┼─ Archon AI ─ vLLM
       │
 Langflow
       │
@@ -232,7 +232,7 @@ Custom Apps
 
 Message:
 
-> Archon Base doesn't replace the AI ecosystem. It operates the infrastructure underneath it.
+> Archon AI doesn't replace the AI ecosystem. It operates the infrastructure underneath it.
 
 ### 09 Developer Experience
 
@@ -320,7 +320,7 @@ OWN YOUR INFRASTRUCTURE.
 
 Minimal:
 ```text
-ARCHON BASE
+ARCHON AI
 
 Open-source AI infrastructure.
 
@@ -331,7 +331,7 @@ GitHub
 Roadmap
 Community
 
-© 2026 Archon Base
+© 2026 Archon AI
 ```
 
 ## Components
@@ -385,7 +385,7 @@ Do not merely shrink desktop.
 
 Hero:
 ```text
-ARCHON BASE
+ARCHON AI
 
 THE OPEN-SOURCE
 INFRASTRUCTURE
@@ -405,4 +405,4 @@ Cards become full width.
 
 The website should communicate:
 
-> You choose the infrastructure. Archon Base gives you the control plane.
+> You choose the infrastructure. Archon AI gives you the control plane.

@@ -1,14 +1,14 @@
-# Archon Base: New User Guide
+# Archon AI: New User Guide
 
-## What is Archon Base?
+## What is Archon AI?
 
-Archon Base is intended to be the **self-hosted AI Backend for agent workloads**. It should help you build and operate a complete AI backend—projects, vector databases, storage, model connections, agent functions, tools, knowledge workflows, and security policies—from one place.
+Archon AI is intended to be the **self-hostable AI cloud platform for agent workloads**. It should help you build and operate a complete AI backend—projects, vector databases, storage, model connections, agent functions, tools, knowledge workflows, and security policies—from one place.
 
 The important distinction is:
 
 - **Supabase/Appwrite** mainly help you build application backends.
 - **Dify/Langflow/Open WebUI** mainly help you build or use AI applications.
-- **Archon Base** is intended to provide the backend services those AI applications need, with self-hosting as a core deployment choice.
+- **Archon AI** is intended to provide the backend services those AI applications need, with self-hosting as a core deployment choice.
 
 ## What exists today?
 
@@ -68,9 +68,9 @@ go vet ./...
 go build ./...
 ```
 
-### Install Archon Base and create the first admin
+### Install Archon AI and create the first admin
 
-The installer creates the **Archon Base product database**. This is the control-plane metadata database for organizations, users, projects, memberships, resource state, and outbox events. Vector databases and other AI resources are created later inside projects; they are not mixed with the product metadata tables.
+The installer creates the **Archon AI product database**. This is the control-plane metadata database for organizations, users, projects, memberships, resource state, and outbox events. Vector databases and other AI resources are created later inside projects; they are not mixed with the product metadata tables.
 
 If PostgreSQL is already running and the `archon` database already exists:
 
@@ -197,7 +197,7 @@ Do not start with every AI platform feature. A working Project → DatabaseInsta
 
 - **Project:** a logical application boundary with environment, region, and quotas.
 - **DatabaseInstance:** a desired vector/data service attached to a Project.
-- **Desired state:** what the user asks Archon Base to create or change.
+- **Desired state:** what the user asks Archon AI to create or change.
 - **Observed state:** what a controller has confirmed in the data plane.
 - **Control plane:** the API, database, UI, and controllers that manage resources.
 - **Data plane:** the actual K3s/Kubernetes workloads and infrastructure services.
@@ -208,6 +208,6 @@ Do not start with every AI platform feature. A working Project → DatabaseInsta
 
 Today, the honest promise is:
 
-> Archon Base contains the early control-plane foundations and a local UI preview for self-hosted AI infrastructure.
+> Archon AI contains the early control-plane foundations and a local UI preview for self-hosted AI infrastructure.
 
 The stronger promise—provisioning and operating AI agents, models, data, tools, and compute from a complete dashboard—remains the target architecture and roadmap, not the current shipped behavior.

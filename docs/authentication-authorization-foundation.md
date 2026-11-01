@@ -1,6 +1,6 @@
 # Authentication and Authorization Foundation
 
-Archon Base now has the first security primitives for user and organization management.
+Archon AI now has the first security primitives for user and organization management.
 
 ## Implemented
 

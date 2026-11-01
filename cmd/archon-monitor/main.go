@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/monitor"
+	"github.com/hacrex/Archon-AI/internal/monitor"
 )
 
 var version = "0.0.1-dev"

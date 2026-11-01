@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/auth"
-	archondb "github.com/hacrex/Archon-Base/internal/db"
-	"github.com/hacrex/Archon-Base/internal/store"
+	"github.com/hacrex/Archon-AI/internal/auth"
+	archondb "github.com/hacrex/Archon-AI/internal/db"
+	"github.com/hacrex/Archon-AI/internal/store"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -83,7 +83,7 @@ func install(args []string) error {
 		}
 		return fmt.Errorf("create initial admin: %w", err)
 	}
-	fmt.Printf("Archon Base installed\n")
+	fmt.Printf("Archon AI installed\n")
 	fmt.Printf("Product database: %s\n", *flags.databaseName)
 	fmt.Printf("Admin email: %s\n", user.Email)
 	fmt.Printf("Admin user ID: %s\n", user.ID)

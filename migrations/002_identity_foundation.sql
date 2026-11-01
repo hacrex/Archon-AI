@@ -1,4 +1,4 @@
--- Archon Base identity foundation, migration 002.
+-- Archon AI identity foundation, migration 002.
 -- This stores users and memberships but does not enable unauthenticated API
 -- mutations. Authentication and authorization must gate future endpoints.
 

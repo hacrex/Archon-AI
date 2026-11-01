@@ -1,4 +1,4 @@
--- Archon Base authentication foundation, migration 003.
+-- Archon AI authentication foundation, migration 003.
 -- Passwords are stored only as adaptive bcrypt hashes. Session plaintext tokens
 -- are never stored; only SHA-256 token hashes are persisted.
 

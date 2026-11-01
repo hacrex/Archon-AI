@@ -1,14 +1,15 @@
-# Archon Base Marketing Website
+# Archon AI Marketing Website
 
-Minimal Neo-Brutalist marketing website scaffold for **Archon Base**, positioned as:
+Minimal Neo-Brutalist marketing website scaffold for **Archon AI**, positioned as:
 
-> **The open-source infrastructure layer for AI.**
+> **The open-source AI Infrastructure Control Plane.**
+> *Your AI. Your Infrastructure. Your Control.*
 
 ## Positioning
 
-Archon Base is an open-source AI infrastructure control plane for self-hosted agents, models, data, tools, and compute.
+Archon AI is an open-source AI infrastructure control plane for self-hosted agents, models, data, tools, and compute.
 
-The site should position Archon Base as infrastructure underneath AI applications such as Open WebUI, Dify, Langflow and custom applications rather than as another AI chat UI or workflow builder.
+The site should position Archon AI as infrastructure underneath AI applications such as Open WebUI, Dify, Langflow and custom applications rather than as another AI chat UI or workflow builder.
 
 ## Design
 
@@ -27,7 +28,7 @@ The site should position Archon Base as infrastructure underneath AI application
 ## Structure
 
 ```text
-archon-base-marketing-website/
+archon-ai-marketing-website/
 ├── README.md
 ├── docs/
 │   ├── UIUX.md
@@ -136,15 +137,15 @@ The website should communicate:
 AI APPLICATIONS
 Open WebUI / Dify / Langflow / Custom Apps
                 ↓
-         ARCHON BASE
+         ARCHON AI
                 ↓
 Kubernetes / GPU / Storage / Models / Data
 ```
 
 Message:
 
-> **Archon Base doesn't replace the AI ecosystem. It operates the infrastructure underneath it.**
+> **Archon AI doesn't replace the AI ecosystem. It operates the infrastructure underneath it.**
 
 ## Naming Note
 
-The name "Archon" is used by multiple current projects and products, so the marketing site should consistently use the full brand **Archon Base** and establish its domain/GitHub identity clearly. This is a branding/discoverability consideration, not a product-positioning change.
+The name "Archon" is used by multiple current projects and products, so the marketing site should consistently use the full brand **Archon AI** and establish its domain/GitHub identity clearly. This is a branding/discoverability consideration, not a product-positioning change.

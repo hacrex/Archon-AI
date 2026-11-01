@@ -1,12 +1,12 @@
-# Archon Base Product Control Plane TODO
+# Archon AI Product Control Plane TODO
 
-**Purpose:** Build a self-hosted AI Backend with the usability of products such as Supabase and Appwrite, focused on the backend services AI applications and agents need: vectors, storage, functions, models, tools, knowledge, and governance.
+**Purpose:** Build a self-hostable AI cloud platform with the usability of products such as Supabase and Appwrite, focused on the backend services AI applications and agents need: vectors, storage, functions, models, tools, knowledge, and governance.
 
 **Product rule:** Do not present planned or preview capabilities as available. Every feature should be labeled **Available**, **Preview**, or **Planned** in the UI, API documentation, and marketing content.
 
 **Primary positioning:**
 
-> Archon Base gives developers one backend to build, connect, secure, and operate AI workloads with vectors, storage, functions, models, tools, and knowledge services.
+> Archon AI gives developers one backend to build, connect, secure, and operate AI workloads with vectors, storage, functions, models, tools, and knowledge services.
 
 ## Current baseline
 
@@ -31,7 +31,7 @@ A user can create an account or sign in, create an organization and project, cre
 ### 0.1 Product boundaries
 
 - [ ] Define the control-plane boundary versus the Kubernetes/data-plane boundary.
-- [ ] Define which resources are owned by Archon Base and which are adapter-backed.
+- [ ] Define which resources are owned by Archon AI and which are adapter-backed.
 - [x] Define the organization, project, environment, cluster, and resource hierarchy.
 - [ ] Define the difference between desired state, observed state, and provider state.
 - [ ] Define product capability statuses: `available`, `preview`, `planned`, `unsupported`, `degraded`.
@@ -134,7 +134,7 @@ A user can create an account or sign in, create an organization and project, cre
 - [ ] Show profile requirements before installation or connection.
 - [ ] Run host prerequisite checks before cluster installation.
 - [ ] Connect an existing K3s/Kubernetes cluster.
-- [ ] Install Archon Base components into a selected namespace.
+- [ ] Install Archon AI components into a selected namespace.
 - [ ] Verify API, database, data plane, and monitor health.
 - [ ] Show a setup checklist that can be resumed later.
 - [ ] Seed only clearly marked demo data, never fake production activity.

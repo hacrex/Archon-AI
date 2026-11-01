@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hacrex/Archon-Base/internal/api"
+	"github.com/hacrex/Archon-AI/internal/api"
 )
 
 type fakeStore struct {

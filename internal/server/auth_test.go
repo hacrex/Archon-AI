@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
 type fakeAuthStore struct {

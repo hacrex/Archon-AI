@@ -1,4 +1,4 @@
--- Archon Base core resources, migration 001.
+-- Archon AI core resources, migration 001.
 -- PostgreSQL 15+; application-generated UUIDs are supported, while pgcrypto
 -- supplies a safe default for callers that do not generate IDs themselves.
 

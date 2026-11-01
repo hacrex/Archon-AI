@@ -1,6 +1,6 @@
 # Student K3s Setup
 
-This guide installs a single-node K3s server for the Archon Base enthusiast profile and starts a local resource monitor.
+This guide installs a single-node K3s server for the Archon AI enthusiast profile and starts a local resource monitor.
 
 ## 1. Check the host
 

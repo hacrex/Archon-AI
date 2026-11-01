@@ -1,4 +1,4 @@
-"""Archon Base Python SDK (skeleton).
+"""Archon AI Python SDK (skeleton).
 
 The real SDK will resolve bindings (vector, storage, models) injected by
 the platform at runtime. These stubs define the intended public shape.

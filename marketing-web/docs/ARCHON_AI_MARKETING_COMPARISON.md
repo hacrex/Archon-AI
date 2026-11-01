@@ -1,18 +1,18 @@
-# Archon Base --- Marketing Website Competitive Comparison
+# Archon AI --- Marketing Website Competitive Comparison
 
-> **Purpose:** Marketing and positioning reference for the Archon Base
+> **Purpose:** Marketing and positioning reference for the Archon AI
 > website.
 >
-> **Primary positioning:** Archon Base is an open-source self-hosted AI
+> **Primary positioning:** Archon AI is an open-source self-hosted AI
 > Backend for agents, models, data, tools, and compute.
 
 ------------------------------------------------------------------------
 
 ## 1. Executive Positioning
 
-### Archon Base
+### Archon AI
 
-**Archon Base is an open-source self-hosted AI Backend for agents, models,
+**Archon AI is an open-source self-hosted AI Backend for agents, models,
 data, tools, and compute.**
 
 It provides a unified backend for building and operating AI applications:
@@ -59,7 +59,7 @@ The AI developer stack is increasingly divided into several layers.
                                │
 ┌──────────────────────────────▼──────────────────────────────┐
 │                    SELF-HOSTED AI BACKEND                  │
-│                         ARCHON BASE                         │
+│                         ARCHON AI                         │
 │ Auth • Projects • Vectors • Storage • Functions • Models   │
 │ Tools • RAG • Policies • Evals • Observability              │
 └──────────────────────────────┬──────────────────────────────┘
@@ -72,7 +72,7 @@ The AI developer stack is increasingly divided into several layers.
 
 This product positioning is important.
 
-Archon Base should not primarily market itself as another chat UI,
+Archon AI should not primarily market itself as another chat UI,
 visual AI builder, or generic non-AI backend-as-a-service platform.
 
 ------------------------------------------------------------------------
@@ -80,7 +80,7 @@ visual AI builder, or generic non-AI backend-as-a-service platform.
 # 3. Competitive Landscape
 
   ----------------------------------------------------------------------------
-  Platform          Primary Category       Core Strength     Archon Base
+  Platform          Primary Category       Core Strength     Archon AI
                                                              Relationship
   ----------------- ---------------------- ----------------- -----------------
   **Supabase**      Backend-as-a-Service   Postgres, Auth,   Complementary
@@ -107,7 +107,7 @@ visual AI builder, or generic non-AI backend-as-a-service platform.
                                            workflows, APIs,  
                                            MCP               
 
-  **Archon Base**   AI Infrastructure      Agents, models,   Infrastructure
+  **Archon AI**   AI Infrastructure      Agents, models,   Infrastructure
                     Control Plane          compute, data,    layer
                                            tools, governance 
   ----------------------------------------------------------------------------
@@ -118,7 +118,7 @@ They solve different problems.
 
 ------------------------------------------------------------------------
 
-# 4. Archon Base vs Supabase
+# 4. Archon AI vs Supabase
 
 ## What Supabase is
 
@@ -128,9 +128,9 @@ functions, and vector search capabilities.
 
 Supabase also supports self-hosting.
 
-## What Archon Base is
+## What Archon AI is
 
-Archon Base is designed around AI infrastructure rather than general
+Archon AI is designed around AI infrastructure rather than general
 application backend infrastructure.
 
 Its primary resources include:
@@ -155,7 +155,7 @@ Application Backend
         ↓
 Postgres • Auth • Storage • Realtime • Functions
 
-Archon Base
+Archon AI
 AI Infrastructure
         ↓
 Agents • Models • GPU • Vector DB • Storage
@@ -164,7 +164,7 @@ Tools • RAG • Sandboxes • Evals • Governance
 
 ### Marketing message
 
-> **Supabase gives your application a backend. Archon Base gives your AI
+> **Supabase gives your application a backend. Archon AI gives your AI
 > workloads an infrastructure platform.**
 
 ### Potential integration
@@ -177,7 +177,7 @@ Application
     │     ├── Auth
     │     └── Realtime
     │
-    └── Archon Base
+    └── Archon AI
           ├── Agents
           ├── Models
           ├── GPU
@@ -186,12 +186,12 @@ Application
           └── Sandboxed execution
 ```
 
-**Do not position Archon Base as a replacement for Supabase's Postgres
+**Do not position Archon AI as a replacement for Supabase's Postgres
 developer experience.**
 
 ------------------------------------------------------------------------
 
-# 5. Archon Base vs Appwrite
+# 5. Archon AI vs Appwrite
 
 ## What Appwrite is
 
@@ -201,9 +201,9 @@ services, hosting, and newer agent/MCP capabilities.
 
 Its current positioning increasingly targets agents and developers.
 
-## What makes Archon Base different
+## What makes Archon AI different
 
-Archon Base focuses on the infrastructure required to operate AI
+Archon AI focuses on the infrastructure required to operate AI
 workloads themselves.
 
 The distinction is:
@@ -212,13 +212,13 @@ The distinction is:
 Appwrite
 Build and deploy applications.
 
-Archon Base
+Archon AI
 Build and operate AI backends for applications and agents.
 ```
 
 ### Architectural difference
 
-  Area                                Appwrite           Archon Base
+  Area                                Appwrite           Archon AI
   ----------------------------------- ------------------ --------------------------
   Authentication                      Core               Core
   Application database                Core               Metadata/control plane
@@ -235,12 +235,12 @@ Build and operate AI backends for applications and agents.
 
 ### Marketing message
 
-> **Appwrite is a general backend for applications. Archon Base is an
+> **Appwrite is a general backend for applications. Archon AI is an
 > AI Backend for applications and agents.**
 
 ------------------------------------------------------------------------
 
-# 6. Archon Base vs E2B
+# 6. Archon AI vs E2B
 
 ## What E2B is
 
@@ -251,11 +251,11 @@ observability, and lifecycle management.
 
 E2B supports cloud, BYOC, private, and self-hosted deployment models.
 
-## Where Archon Base differs
+## Where Archon AI differs
 
 E2B is highly focused on the execution boundary.
 
-Archon Base is broader:
+Archon AI is broader:
 
 ``` text
 E2B
@@ -267,7 +267,7 @@ MicroVM
 ```
 
 ``` text
-Archon Base
+Archon AI
 Project
   ↓
 Identity / Policy
@@ -286,7 +286,7 @@ Models / Tools / Data / Storage / Network
 
 ## Strategic approach
 
-Archon Base should avoid unnecessarily rebuilding specialized sandbox
+Archon AI should avoid unnecessarily rebuilding specialized sandbox
 infrastructure.
 
 A runtime abstraction can support multiple execution backends:
@@ -303,12 +303,12 @@ RuntimeProvider
 
 ### Marketing message
 
-> **E2B specializes in the sandbox. Archon Base manages the AI
+> **E2B specializes in the sandbox. Archon AI manages the AI
 > infrastructure around the sandbox.**
 
 ------------------------------------------------------------------------
 
-# 7. Archon Base vs Open WebUI
+# 7. Archon AI vs Open WebUI
 
 ## What Open WebUI is
 
@@ -332,7 +332,7 @@ Models / Agents / Knowledge / Tools
 ``` text
 Open WebUI
         ↓
-      Archon Base
+      Archon AI
         ↓
 Model Gateway • Agents • RAG • Vector DB
 GPU • Storage • Sandboxes • Governance
@@ -340,15 +340,15 @@ GPU • Storage • Sandboxes • Governance
 
 ### Marketing message
 
-> **Open WebUI is where users interact with AI. Archon Base provides the
+> **Open WebUI is where users interact with AI. Archon AI provides the
 > backend services that power AI agents, data, tools, and workflows.**
 
-Archon Base can therefore be positioned as infrastructure that Open
+Archon AI can therefore be positioned as infrastructure that Open
 WebUI and similar interfaces can consume.
 
 ------------------------------------------------------------------------
 
-# 8. Archon Base vs Dify
+# 8. Archon AI vs Dify
 
 ## What Dify is
 
@@ -360,13 +360,13 @@ tooling, APIs, and LLMOps capabilities.
 
 Dify focuses on **building AI applications**.
 
-Archon Base focuses on **operating AI infrastructure**.
+Archon AI focuses on **operating AI infrastructure**.
 
 ``` text
 Dify
 Build the AI application.
 
-Archon Base
+Archon AI
 Provision and operate the infrastructure.
 ```
 
@@ -379,7 +379,7 @@ Dify
   ↓
 Application workflow
   ↓
-Archon Base API / MCP
+Archon AI API / MCP
   ↓
 Archon Model Gateway
   ↓
@@ -393,7 +393,7 @@ Dify
   ↓
 RAG workflow
   ↓
-Archon Base
+Archon AI
   ├── Qdrant
   ├── Object Storage
   ├── Knowledge Pipeline
@@ -402,12 +402,12 @@ Archon Base
 
 ### Marketing message
 
-> **Dify helps you build AI applications. Archon Base provides the
+> **Dify helps you build AI applications. Archon AI provides the
 > self-hosted backend services those applications connect to.**
 
 ------------------------------------------------------------------------
 
-# 9. Archon Base vs Langflow
+# 9. Archon AI vs Langflow
 
 ## What Langflow is
 
@@ -423,10 +423,10 @@ Visual AI composition
         ↓
 Agent / RAG / workflow
         ↓
-Archon Base
+Archon AI
 ```
 
-Archon Base can provide:
+Archon AI can provide:
 
 -   Model endpoints
 -   Agent runtimes
@@ -440,7 +440,7 @@ Archon Base can provide:
 
 ### Marketing message
 
-> **Langflow helps you compose AI workflows. Archon Base provides the
+> **Langflow helps you compose AI workflows. Archon AI provides the
 > backend resources and functions those workflows use.**
 
 ------------------------------------------------------------------------
@@ -449,14 +449,14 @@ Archon Base can provide:
 
 The website should avoid:
 
-> "Archon Base is an alternative to Supabase, Appwrite, Dify, Open
+> "Archon AI is an alternative to Supabase, Appwrite, Dify, Open
 > WebUI, Langflow and E2B."
 
 That creates an unnecessarily broad competitive claim.
 
 Instead:
 
-> **Archon Base is the self-hosted AI Backend for applications and
+> **Archon AI is the self-hosted AI Backend for applications and
 > agents.**
 
 And:
@@ -520,7 +520,7 @@ tools, and compute --- built on Kubernetes and open source.
 
 ### CTA
 
-**Deploy Archon Base**
+**Deploy Archon AI**
 
 **Explore the Architecture**
 
@@ -547,14 +547,14 @@ and GPU workloads through one API, CLI, and control plane.
 
 # 13. Recommended One-Line Description
 
-> **Archon Base is an open-source, self-hostable AI infrastructure
+> **Archon AI is an open-source, self-hostable AI infrastructure
 > control plane for agents, models, data, tools, and compute.**
 
 ------------------------------------------------------------------------
 
 # 14. Recommended Short Description
 
-> Archon Base brings the infrastructure behind modern AI applications
+> Archon AI brings the infrastructure behind modern AI applications
 > into one self-hostable control plane. Provision agents, model
 > endpoints, vector databases, object storage, tools, sandboxes, and GPU
 > workloads while keeping your data and infrastructure under your
@@ -566,17 +566,17 @@ and GPU workloads through one API, CLI, and control plane.
 
 ### Simple version
 
-> **Think of Archon Base as a Kubernetes-native backend platform for AI
+> **Think of Archon AI as a Kubernetes-native backend platform for AI
 > infrastructure.**
 
 ### Familiar comparison
 
 > **Supabase and Appwrite provide backend infrastructure for
-> applications. Archon Base provides infrastructure for AI workloads.**
+> applications. Archon AI provides infrastructure for AI workloads.**
 
 ### Technical comparison
 
-> **Kubernetes gives you primitives. Archon Base gives you an AI-focused
+> **Kubernetes gives you primitives. Archon AI gives you an AI-focused
 > control plane on top of those primitives.**
 
 ------------------------------------------------------------------------
@@ -636,7 +636,7 @@ product boundaries evolve rapidly.
 
 # 17. The Core Differentiator
 
-Archon Base should own this concept:
+Archon AI should own this concept:
 
 ## Infrastructure Abstraction for AI
 
@@ -674,10 +674,10 @@ RAG pipeline
 Policy
 ```
 
-Archon Base provides a unified control plane over these components.
+Archon AI provides a unified control plane over these components.
 
 ``` text
-                     ARCHON BASE
+                     ARCHON AI
                          │
        ┌─────────────────┼─────────────────┐
        │                 │                 │
@@ -726,18 +726,18 @@ AI Usage
 AI Policy
 ```
 
-Archon Base turns infrastructure primitives into AI-native platform
+Archon AI turns infrastructure primitives into AI-native platform
 resources.
 
 ### Website message
 
-> **Kubernetes manages workloads. Archon Base manages AI workloads.**
+> **Kubernetes manages workloads. Archon AI manages AI workloads.**
 
 ------------------------------------------------------------------------
 
 # 19. The Open-Source Story
 
-Archon Base should emphasize:
+Archon AI should emphasize:
 
 ### Self-hostable
 
@@ -770,7 +770,7 @@ clouds.
 
 # 20. The Ecosystem Story
 
-Archon Base should be presented as an ecosystem rather than an isolated
+Archon AI should be presented as an ecosystem rather than an isolated
 application.
 
 ``` text
@@ -784,7 +784,7 @@ application.
                        │
                    API / MCP
                        │
-                 ARCHON BASE
+                 ARCHON AI
                        │
      ┌─────────────────┼─────────────────┐
      │                 │                 │
@@ -801,7 +801,7 @@ application.
 
 This creates a more powerful narrative:
 
-> **Archon Base does not replace the AI ecosystem. It connects and
+> **Archon AI does not replace the AI ecosystem. It connects and
 > operates it.**
 
 ------------------------------------------------------------------------
@@ -850,7 +850,7 @@ Kubernetes-native resources.
 
 ------------------------------------------------------------------------
 
-# 22. Who Archon Base Is For
+# 22. Who Archon AI Is For
 
 ## AI Engineers
 
@@ -906,13 +906,13 @@ Self-host and customize the complete AI infrastructure stack.
 
 ### Message 6
 
-> **Use the AI frameworks you like. Archon Base runs underneath them.**
+> **Use the AI frameworks you like. Archon AI runs underneath them.**
 
 ------------------------------------------------------------------------
 
 # 24. Recommended Comparison Section on the Website
 
-## "Where Archon Base Fits"
+## "Where Archon AI Fits"
 
 Instead of a traditional competitor attack page, use a neutral ecosystem
 diagram.
@@ -927,7 +927,7 @@ diagram.
                             │
                             ▼
                     ┌───────────────┐
-                    │  ARCHON BASE  │
+                    │  ARCHON AI  │
                     │               │
                     │ AI CONTROL    │
                     │ PLANE         │
@@ -952,8 +952,8 @@ diagram.
 
 ### Section copy
 
-> Use Archon Base with the AI applications, frameworks, models, and
-> infrastructure you already use. Archon Base provides the control plane
+> Use Archon AI with the AI applications, frameworks, models, and
+> infrastructure you already use. Archon AI provides the control plane
 > that connects them.
 
 ------------------------------------------------------------------------
@@ -967,13 +967,13 @@ diagram.
 -   Emphasize self-hosting and infrastructure ownership.
 -   Explain Kubernetes-native design.
 -   Highlight AI-specific infrastructure abstractions.
--   Show how Archon Base works with existing AI applications.
+-   Show how Archon AI works with existing AI applications.
 -   Use concrete technical capabilities.
 -   Present other platforms accurately.
 
 ## Do not
 
--   Claim Archon Base replaces every platform.
+-   Claim Archon AI replaces every platform.
 -   Claim competitors lack features they actually provide.
 -   Market every feature as a unique invention.
 -   Use vague "all-in-one AI platform" messaging without explaining the
@@ -1051,7 +1051,7 @@ Roadmap
 
 # 28. Recommended Brand Statement
 
-> **Archon Base is the open-source control plane for AI
+> **Archon AI is the open-source control plane for AI
 > infrastructure.**
 >
 > Run agents, models, vector databases, storage, tools, and GPU
@@ -1066,7 +1066,7 @@ Roadmap
 > The future of AI infrastructure should not require every team to
 > assemble the same stack from scratch.
 >
-> Archon Base provides the control plane.
+> Archon AI provides the control plane.
 >
 > You choose the models.
 >
@@ -1076,7 +1076,7 @@ Roadmap
 >
 > You choose the infrastructure.
 >
-> **Archon Base connects and operates them.**
+> **Archon AI connects and operates them.**
 
 ------------------------------------------------------------------------
 
@@ -1085,7 +1085,7 @@ Roadmap
   -----------------------------------------------------------------------
   Question                            Answer
   ----------------------------------- -----------------------------------
-  What is Archon Base?                Open-source AI infrastructure
+  What is Archon AI?                Open-source AI infrastructure
                                       control plane
 
   Who is it for?                      AI engineers, platform teams,

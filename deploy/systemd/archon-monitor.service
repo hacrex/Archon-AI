@@ -1,6 +1,6 @@
 [Unit]
-Description=Archon Base local resource monitor
-Documentation=https://github.com/hacrex/Archon-Base/blob/main/docs/self-hosting-requirements.md
+Description=Archon AI local resource monitor
+Documentation=https://github.com/hacrex/Archon-AI/blob/main/docs/self-hosting-requirements.md
 After=network-online.target
 Wants=network-online.target
 

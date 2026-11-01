@@ -102,10 +102,10 @@ export function boot() {
     if (action === 'user') {
       modal('Account', `<p>${state.user?.Email || 'Signed-in user'}</p><p class="form-note">Organization: ${state.user?.Organization || 'local'}</p>`, '<button class="button" data-action="close-modal">Cancel</button><button class="button primary" data-action="logout">Sign out</button>');
     }
-    if (action === 'context') modal('AI Backend context', 'Organization and project switching will use authenticated membership and project APIs in the next slice.');
+    if (action === 'context') modal('AI infrastructure context', 'Organization and project switching will use authenticated membership and project APIs in the next slice.');
     if (action === 'search' || action === 'notifications') modal(action === 'search' ? 'Global search' : 'Notifications', action === 'search' ? 'Search will span projects, resources, deployments, logs, and documentation once the API index is connected.' : 'No new notifications.');
     if (action === 'new-project') {
-      modal('Create AI Backend project', `<form data-form="project" class="auth-form"><label>Project name<input name="name" required pattern="[a-z][a-z0-9-]{1,62}" placeholder="support-bot"></label><label>Display name<input name="displayName" required placeholder="Support Bot"></label><label>Environment<select name="environment"><option>development</option><option>staging</option><option>production</option></select></label><label>Region<input name="region" value="local"></label><div class="form-error" hidden></div><button class="button primary" type="submit">Create project</button></form>`);
+      modal('Create AI infrastructure project', `<form data-form="project" class="auth-form"><label>Project name<input name="name" required pattern="[a-z][a-z0-9-]{1,62}" placeholder="support-bot"></label><label>Display name<input name="displayName" required placeholder="Support Bot"></label><label>Environment<select name="environment"><option>development</option><option>staging</option><option>production</option></select></label><label>Region<input name="region" value="local"></label><div class="form-error" hidden></div><button class="button primary" type="submit">Create project</button></form>`);
     }
     if (action === 'logout') {
       try { await logout(state.token); } catch (_) { /* clear local state even if API is unavailable */ }
@@ -115,7 +115,7 @@ export function boot() {
       document.querySelector('#modal-root').innerHTML = '';
       render();
     }
-    if (action === 'planned') modal('Planned capability', 'This AI Backend surface is visible to make the product boundary clear.');
+    if (action === 'planned') modal('Planned capability', 'This AI infrastructure surface is visible to make the product boundary clear.');
     if (action === 'allocation-policy' || action === 'edit-allocation') modal('Preview capability', 'Allocation management will be connected to the resource API after project authorization is complete.');
     if (action === 'close-modal') document.querySelector('#modal-root').innerHTML = '';
   });

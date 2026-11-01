@@ -1,4 +1,4 @@
-// Command archon is the Archon Base CLI.
+// Command archon is the Archon AI CLI.
 package main
 
 import (
@@ -12,15 +12,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/auth"
-	archondb "github.com/hacrex/Archon-Base/internal/db"
-	"github.com/hacrex/Archon-Base/internal/store"
+	"github.com/hacrex/Archon-AI/internal/auth"
+	archondb "github.com/hacrex/Archon-AI/internal/db"
+	"github.com/hacrex/Archon-AI/internal/store"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 const localOrganizationID = "00000000-0000-0000-0000-000000000001"
 
-const usage = `archon: CLI for Archon Base
+const usage = `archon: CLI for Archon AI
 
 Usage:
   archon <command> [args]

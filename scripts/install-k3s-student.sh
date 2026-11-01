@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# Install a single-node K3s server for Archon Base student practice.
+# Install a single-node K3s server for Archon AI student practice.
 # This script is intentionally explicit: use --check-only to inspect a host,
 # --dry-run to print the install command, and run without either flag only
 # when the host is ready and the operator intends to change the system.
@@ -22,7 +22,7 @@ usage() {
   cat <<'EOF'
 Usage: install-k3s-student.sh [options]
 
-Install a single-node K3s server for the Archon Base enthusiast/student profile.
+Install a single-node K3s server for the Archon AI enthusiast/student profile.
 
 Options:
   --check-only          Check prerequisites without changing the host.

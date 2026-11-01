@@ -1,6 +1,6 @@
 # Contributing
 
-Archon Base is at the design and scaffold stage.
+Archon AI is at the design and scaffold stage.
 
 1. Read `docs/technical-design-document.md`.
 2. Pick an item from the current roadmap phase in the README.

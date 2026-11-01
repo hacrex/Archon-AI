@@ -11,10 +11,10 @@ import (
 	"syscall"
 	"time"
 
-	archondb "github.com/hacrex/Archon-Base/internal/db"
-	"github.com/hacrex/Archon-Base/internal/provision"
-	"github.com/hacrex/Archon-Base/internal/server"
-	"github.com/hacrex/Archon-Base/internal/store"
+	archondb "github.com/hacrex/Archon-AI/internal/db"
+	"github.com/hacrex/Archon-AI/internal/provision"
+	"github.com/hacrex/Archon-AI/internal/server"
+	"github.com/hacrex/Archon-AI/internal/store"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 

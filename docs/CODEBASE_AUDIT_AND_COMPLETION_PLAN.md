@@ -1,4 +1,4 @@
-# Archon Base Codebase Audit and Completion Plan
+# Archon AI Codebase Audit and Completion Plan
 
 **Audit date:** 2026-10-08  
 **Branch:** `main`  
@@ -6,7 +6,7 @@
 
 ## 1. Executive summary
 
-Archon Base has a useful foundation, but it is not yet the Supabase/Appwrite-style product described by the long-term documentation.
+Archon AI has a useful foundation, but it is not yet the Supabase/Appwrite-style product described by the long-term documentation.
 
 The current shipped implementation is:
 
@@ -516,7 +516,7 @@ Tasks:
 
 Exit criteria:
 
-- A clean K3s cluster can install Archon Base.
+- A clean K3s cluster can install Archon AI.
 - A Project and DatabaseInstance can reconcile into Kubernetes.
 - Upgrade and rollback are tested.
 

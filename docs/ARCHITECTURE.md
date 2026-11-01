@@ -1,4 +1,4 @@
-# Archon Base Architecture
+# Archon AI Architecture
 
 **Architecture status:** Early Access foundation  
 **Current release boundary:** local control plane, PostgreSQL resource state, optional Qdrant provisioning, student/K3s tooling, and identity foundation  
@@ -6,7 +6,7 @@
 
 ## 1. Product architecture at a glance
 
-Archon Base is designed as a self-hosted AI Backend. Developers use its API, dashboard, CLI, and SDKs to create the backend resources their agents need—vectors, storage, functions, models, tools, and knowledge workflows. Internally, the platform uses a control plane to store desired state and coordinate provisioning; the data plane runs the actual services.
+Archon AI is designed as a self-hostable AI cloud platform. Developers use its API, dashboard, CLI, and SDKs to create the backend resources their agents need—vectors, storage, functions, models, tools, and knowledge workflows. Internally, the platform uses a control plane to store desired state and coordinate provisioning; the data plane runs the actual services.
 
 ```mermaid
 flowchart LR

@@ -1,4 +1,4 @@
-# Archon Base Early Access MVP — October 2026
+# Archon AI Early Access MVP — October 2026
 
 **Target release:** October 31, 2026  
 **Planning window:** October 8–31, 2026  
@@ -6,11 +6,11 @@
 
 ## 1. Reality-based goal
 
-Archon Base should not attempt to become the complete AI Backend equivalent of Supabase/Appwrite before November. That would require complete authentication, multi-tenant authorization, storage, model routing, agent isolation, audit, upgrades, and operational hardening.
+Archon AI should not attempt to become the complete AI Backend equivalent of Supabase/Appwrite before November. That would require complete authentication, multi-tenant authorization, storage, model routing, agent isolation, audit, upgrades, and operational hardening.
 
 The achievable October goal is a **small but real control plane**:
 
-> A developer can start Archon Base locally, bootstrap an account, create an AI project, provision a Qdrant vector backend, see real resource status in the dashboard, and run a trusted local support-agent example.
+> A developer can start Archon AI locally, bootstrap an account, create an AI project, provision a Qdrant vector backend, see real resource status in the dashboard, and run a trusted local support-agent example.
 
 This is a credible Early Access product because the core workflow is real rather than a collection of disconnected preview screens.
 

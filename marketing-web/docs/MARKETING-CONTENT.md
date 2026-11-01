@@ -1,4 +1,4 @@
-# Archon Base Marketing Website Content Scaffold
+# Archon AI Marketing Website Content Scaffold
 
 ## Hero
 
@@ -27,7 +27,7 @@ Every AI application eventually needs more than a model.
 
 Kubernetes. GPUs. Model servers. Vector databases. Object storage. Secrets. Networking. Sandboxing. Observability.
 
-Archon Base brings these infrastructure concerns behind one AI-focused control plane.
+Archon AI brings these infrastructure concerns behind one AI-focused control plane.
 
 ### Closing
 WHY ASSEMBLE THE SAME INFRASTRUCTURE EVERY TIME?
@@ -72,7 +72,7 @@ Trace workloads, inspect infrastructure, measure usage and evaluate AI behavior.
 USE THE TOOLS YOU ALREADY USE.
 
 ### Copy
-Build with the AI applications and frameworks you already know. Archon Base provides the infrastructure underneath them.
+Build with the AI applications and frameworks you already know. Archon AI provides the infrastructure underneath them.
 
 ### Integrations
 Open WebUI
@@ -120,7 +120,7 @@ Start small. Grow into a Kubernetes cluster. Keep the same platform model as you
 YOUR AI. YOUR INFRASTRUCTURE. YOUR CONTROL.
 
 ### Copy
-Self-host Archon Base on infrastructure you own. Use open components, choose your model providers and keep your architecture portable.
+Self-host Archon AI on infrastructure you own. Use open components, choose your model providers and keep your architecture portable.
 
 ---
 

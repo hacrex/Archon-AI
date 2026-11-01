@@ -1,20 +1,20 @@
-# Archon Base
+# Archon AI
 
-**The self-hosted AI Backend.** Build agent backends with vectors, storage, functions, models, and tools on infrastructure you control.
+**The open-source AI Infrastructure Control Plane.** Host models. Deploy agents. Orchestrate compute. Own your AI infrastructure.
 
-Archon Base is an open-source backend platform for AI workloads. It brings the developer experience of Appwrite and Supabase to agent backends: one install, one API, one CLI, one dashboard, and one auth model for vector databases, storage, agent functions, model connections, tools, and knowledge workflows.
+Archon AI is a self-hostable AI cloud platform. It brings the developer experience of Appwrite and Supabase to AI infrastructure: one install, one API, one CLI, one dashboard, and one auth model for vector databases, storage, agent functions, model connections, tools, and knowledge workflows.
 
 > Status: foundation and preview stage. Project/DatabaseInstance APIs, PostgreSQL persistence, Qdrant provisioning, authentication, first-user bootstrap, student K3s tooling, and a local dashboard preview exist. Storage, model connections, agent functions, tools, and knowledge workflows remain in development. Start with the [New User Guide](docs/NEW_USER_GUIDE.md).
 
-## Why Archon Base
+## Why Archon AI
 
-| AI backend need | Typical answer today | Archon Base |
+| AI infrastructure need | Typical answer today | Archon AI |
 |---|---|---|
 | Vector database | Run Qdrant, Weaviate or Milvus yourself | Provisioned declaratively, with backups and upgrades |
 | Agent runtime | Sandbox service or DIY containers | Sandboxed functions with bindings to your own data |
 | Model and file storage | Separate S3 setup | Built in, with a model registry and events |
 | Glue (auth, secrets, tracing) | Written per project | One control plane |
-| Developer experience | Assemble several services and SDKs | One AI Backend API, CLI, dashboard, and auth model |
+| Developer experience | Assemble several services and SDKs | One AI Infrastructure API, CLI, dashboard, and auth model |
 
 ## Core components
 
@@ -27,7 +27,7 @@ Archon Base is an open-source backend platform for AI workloads. It brings the d
 ## Repository layout
 
 ```
-archon-base/
+archon-ai/
   cmd/archon-api/          control plane API (skeleton)
   cmd/archon/              CLI (skeleton)
   internal/server/         HTTP handlers
@@ -75,7 +75,7 @@ make build
 
 ## Open-source building blocks
 
-Archon Base integrates existing projects behind swappable adapters: Qdrant, Chroma, Weaviate, Milvus and pgvector for vectors; vLLM, Ollama and Hugging Face TEI for inference; Temporal for durable workflows; OpenTelemetry and Langfuse for tracing; promptfoo and Ragas for evals; gVisor and Firecracker for sandboxing; SeaweedFS for storage. The full table with roles and license notes is in section 6.1 of the design document.
+Archon AI integrates existing projects behind swappable adapters: Qdrant, Chroma, Weaviate, Milvus and pgvector for vectors; vLLM, Ollama and Hugging Face TEI for inference; Temporal for durable workflows; OpenTelemetry and Langfuse for tracing; promptfoo and Ragas for evals; gVisor and Firecracker for sandboxing; SeaweedFS for storage. The full table with roles and license notes is in section 6.1 of the design document.
 
 ## Example manifests
 
@@ -152,8 +152,8 @@ See [Self-hosting Requirements](docs/self-hosting-requirements.md) for the stude
 
 ## License
 
-Archon Base is licensed under the [Apache License 2.0](LICENSE). Third-party integrations may have separate licenses; review their terms before bundling or redistributing them.
+Archon AI is licensed under the [Apache License 2.0](LICENSE). Third-party integrations may have separate licenses; review their terms before bundling or redistributing them.
 
 ## Naming note
 
-Check trademark and registry availability for "Archon Base" before public launch.
+Check trademark and registry availability for "Archon AI" before public launch.

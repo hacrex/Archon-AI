@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/api"
-	archondb "github.com/hacrex/Archon-Base/internal/db"
+	"github.com/hacrex/Archon-AI/internal/api"
+	archondb "github.com/hacrex/Archon-AI/internal/db"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"

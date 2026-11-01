@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hacrex/Archon-Base/internal/api"
-	"github.com/hacrex/Archon-Base/internal/auth"
-	"github.com/hacrex/Archon-Base/internal/store"
+	"github.com/hacrex/Archon-AI/internal/api"
+	"github.com/hacrex/Archon-AI/internal/auth"
+	"github.com/hacrex/Archon-AI/internal/store"
 )
 
 type projectAuthorizationStore struct {

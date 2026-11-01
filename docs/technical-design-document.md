@@ -1,9 +1,9 @@
-# Archon Base: Self-Hostable AI Cloud Platform
+# Archon AI: Self-Hostable AI Cloud Platform
 ### Technical Design Document, v1.0
 
 ## 1. Summary
 
-Archon Base is an open-source, self-hostable backend platform for AI applications. It does for AI workloads what Appwrite and Supabase do for classic apps. One install gives a team the building blocks every AI app needs:
+Archon AI is an open-source, self-hostable backend platform for AI applications. It does for AI workloads what Appwrite and Supabase do for classic apps. One install gives a team the building blocks every AI app needs:
 
 1. **Vector and data stores**, provisioned on demand (Qdrant, Chroma, Weaviate, Milvus, pgvector, ScyllaDB).
 2. **Agent Functions**, serverless and sandboxed runtimes for agents, tools and pipelines.
@@ -21,10 +21,10 @@ One control plane exposes a single API, CLI, console and auth model across all o
 
 ### Non-goals (v1)
 - Training foundation models. Fine-tuning orchestration comes later.
-- Replacing full MLOps suites. Archon Base integrates with them.
+- Replacing full MLOps suites. Archon AI integrates with them.
 
 ### Positioning
-Supabase is the closest general backend, but it has no agent-specific tooling. Sandbox projects (E2B, Daytona) and vector databases (Qdrant, Weaviate, Milvus) each cover one slice. Archon Base's value is the integration: one install, one auth model, and bindings that connect agents to vectors, storage and models.
+Supabase is the closest general backend, but it has no agent-specific tooling. Sandbox projects (E2B, Daytona) and vector databases (Qdrant, Weaviate, Milvus) each cover one slice. Archon AI's value is the integration: one install, one auth model, and bindings that connect agents to vectors, storage and models.
 
 ---
 
@@ -353,9 +353,9 @@ Organization, Project, Environment (dev, staging, prod). Quotas for CPU, memory,
 
 ### 6.1 Integrated open-source tools
 
-Archon Base integrates existing open-source projects instead of rebuilding them. Licenses change over time, so verify each one before bundling or redistributing.
+Archon AI integrates existing open-source projects instead of rebuilding them. Licenses change over time, so verify each one before bundling or redistributing.
 
-| Area | Tools | Role in Archon Base | License (verify) |
+| Area | Tools | Role in Archon AI | License (verify) |
 |---|---|---|---|
 | Vector engines | Qdrant, Chroma, Weaviate, Milvus, pgvector | Engine Packages | Apache 2.0, BSD-3, PostgreSQL |
 | Inference | vLLM, Ollama, llama.cpp, Hugging Face TEI | Backends behind the Model Gateway; TEI for embeddings | Apache 2.0, MIT |
@@ -469,7 +469,7 @@ All resources are declarative and idempotent, with versions and status condition
 | Data loss in self-managed setups | Backups on by default, restore drills, clear DR docs |
 | Runaway agent cost or loops | Budgets, rate caps, kill switch, loop detection |
 | Scope creep | Phase gates, each phase ships a usable product |
-| Name and trademark conflicts | Search registries and trademarks for "Archon Base" before public launch |
+| Name and trademark conflicts | Search registries and trademarks for "Archon AI" before public launch |
 
 ---
 

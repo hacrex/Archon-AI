@@ -1,4 +1,4 @@
-# Archon Base Core v1 Resource Schema
+# Archon AI Core v1 Resource Schema
 
 **Status:** draft for Phase 1
 

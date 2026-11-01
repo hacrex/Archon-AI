@@ -1,4 +1,4 @@
-// Package api defines the declarative Archon Base resource types (v1).
+// Package api defines the declarative Archon AI resource types (v1).
 package api
 
 import (
