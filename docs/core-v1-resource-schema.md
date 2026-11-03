@@ -116,6 +116,9 @@ conditions:
 
 - `POST /v1/projects` creates a Project and returns `201 Created`.
 - `GET /v1/projects/{project}` returns a Project.
+- `GET /v1/projects` lists Projects with filtering and cursor pagination:
+  - Filters: `?phase=` (exact, case-insensitive on `status.phase`) and `?name=` (exact).
+  - Pagination: `?limit=` (default 50, max 200) and `?cursor=` (opaque; the API returns `next_cursor` when more pages exist). Invalid values yield `422 validation_failed`.
 - `PATCH /v1/projects/{project}` updates mutable spec fields and increments `metadata.generation`.
 - `DELETE /v1/projects/{project}` requests deletion and returns `202 Accepted` while children are being removed.
 - `POST /v1/projects/{project}/databases` creates a DatabaseInstance and returns `202 Accepted` because provisioning is asynchronous.

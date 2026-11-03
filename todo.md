@@ -41,6 +41,7 @@
 - [x] Add `/livez` and dependency-aware `/readyz`.
 - [x] Implement Project endpoints:
   - [x] `POST /v1/projects`
+  - [x] `GET /v1/projects` with pagination (`limit`/`cursor`) and filtering (`phase`/`name`)
   - [x] `GET /v1/projects/{project}`
   - [x] `PATCH /v1/projects/{project}`
   - [x] `DELETE /v1/projects/{project}`
@@ -190,7 +191,7 @@ Start only after the Phase 1 local definition of done is met.
 
 Implement the next unchecked items in Sections 1–3:
 
-1. Add `GET /v1/projects` with pagination and filtering.
+1. ~~Add `GET /v1/projects` with pagination and filtering.~~ Done (cursor pagination via `limit`/`cursor`, filters via `phase`/`name`, covered by unit tests).
 2. Implement `archon dev` and `archon dev down`.
 3. Implement the Qdrant adapter and reconciliation loop.
 4. Connect the dashboard to real API data.
