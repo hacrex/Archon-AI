@@ -11,6 +11,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -348,7 +350,20 @@ func (s *Server) projects(w http.ResponseWriter, r *http.Request) {
 			s.writeStoreError(w, err)
 			return
 		}
-		writeJSON(w, http.StatusOK, map[string]any{"items": projects})
+		// Filtering: ?phase= and ?name= (exact) narrow the result set.
+		projects = filterProjects(projects, r.URL.Query())
+		// Pagination: cursor-based over the name-ordered list. The cursor is
+		// the last project name returned on the previous page.
+		items, nextCursor, err := paginateProjects(projects, r.URL.Query())
+		if err != nil {
+			writeValidationError(w, err)
+			return
+		}
+		resp := map[string]any{"items": items}
+		if nextCursor != "" {
+			resp["next_cursor"] = nextCursor
+		}
+		writeJSON(w, http.StatusOK, resp)
 		return
 	}
 	if r.Method != http.MethodPost {
@@ -667,6 +682,78 @@ func writeValidationError(w http.ResponseWriter, err error) {
 		return
 	}
 	writeError(w, http.StatusUnprocessableEntity, "validation_failed", err.Error())
+}
+
+// filterProjects applies the supported list filters to a project slice.
+// Recognized query parameters:
+//   - phase: exact match on status.phase (case-insensitive)
+//   - name:  exact match on metadata.name
+func filterProjects(projects []api.Project, q url.Values) []api.Project {
+	phase := strings.ToLower(q.Get("phase"))
+	name := q.Get("name")
+	if phase == "" && name == "" {
+		return projects
+	}
+	filtered := make([]api.Project, 0, len(projects))
+	for _, p := range projects {
+		if phase != "" && strings.ToLower(p.Status.Phase) != phase {
+			continue
+		}
+		if name != "" && p.Metadata.Name != name {
+			continue
+		}
+		filtered = append(filtered, p)
+	}
+	return filtered
+}
+
+// paginateProjects applies cursor-based pagination over a name-ordered
+// project slice. Supported parameters:
+//   - limit:  page size, default 50, max 200
+//   - cursor: opaque cursor; the last project name of the previous page
+//
+// It returns the page items and the next cursor ("" when no more pages).
+func paginateProjects(projects []api.Project, q url.Values) ([]api.Project, string, error) {
+	limit := 50
+	if raw := q.Get("limit"); raw != "" {
+		parsed, err := strconv.Atoi(raw)
+		if err != nil || parsed < 1 || parsed > 200 {
+			return nil, "", fmt.Errorf("limit must be an integer between 1 and 200")
+		}
+		limit = parsed
+	}
+	cursor := q.Get("cursor")
+
+	start := 0
+	if cursor != "" {
+		// The cursor is the last name returned previously; start after it.
+		found := false
+		for i, p := range projects {
+			if p.Metadata.Name == cursor {
+				start = i + 1
+				found = true
+				break
+			}
+		}
+		if !found {
+			return nil, "", fmt.Errorf("cursor does not reference a known project")
+		}
+	}
+	if start >= len(projects) {
+		return []api.Project{}, "", nil
+	}
+	end := start + limit
+	nextCursor := ""
+	if end < len(projects) {
+		nextCursor = projects[end-1].Metadata.Name
+	} else {
+		end = len(projects)
+	}
+	page := projects[start:end]
+	if page == nil {
+		page = []api.Project{}
+	}
+	return page, nextCursor, nil
 }
 
 type errorResponse struct {
