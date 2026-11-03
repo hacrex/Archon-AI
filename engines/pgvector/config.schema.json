@@ -1,0 +1,41 @@
+# pgvector engine config (Archon AI)
+#
+# These keys are consumed by the provisioner when creating a per-project
+# Postgres cluster with the CloudNativePG operator. Keep in sync with
+# engines/pgvector/engine.yaml.
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pgvector engine config",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "instances": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Number of Postgres instances in the CloudNativePG cluster."
+    },
+    "storageSize": {
+      "type": "string",
+      "pattern": "^[0-9]+(\\.[0-9]+)?(Mi|Gi|Ti)$",
+      "default": "10Gi",
+      "description": "Persistent volume size per instance (Kubernetes quantity)."
+    },
+    "cpuRequest": {
+      "type": "string",
+      "default": "250m",
+      "description": "CPU request per instance (Kubernetes resource quantity)."
+    },
+    "memoryRequest": {
+      "type": "string",
+      "default": "512Mi",
+      "description": "Memory request per instance (Kubernetes resource quantity)."
+    },
+    "sharedPreloadExtensions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["vector"],
+      "description": "Extensions loaded at server start; must include 'vector' for pgvector."
+    }
+  }
+}

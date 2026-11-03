@@ -15,6 +15,7 @@ import (
 	"github.com/hacrex/Archon-AI/internal/auth"
 	archondb "github.com/hacrex/Archon-AI/internal/db"
 	"github.com/hacrex/Archon-AI/internal/store"
+	"github.com/hacrex/Archon-AI/internal/version"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -52,7 +53,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "version":
-		fmt.Println("archon 0.0.1-dev")
+		fmt.Println(version.Get("archon"))
 	case "install":
 		if err := install(os.Args[2:]); err != nil {
 			fmt.Fprintf(os.Stderr, "archon install: %v\n", err)

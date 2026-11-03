@@ -16,9 +16,8 @@ import (
 	"time"
 
 	"github.com/hacrex/Archon-AI/internal/monitor"
+	"github.com/hacrex/Archon-AI/internal/version"
 )
-
-var version = "0.0.1-dev"
 
 type daemon struct {
 	collector monitor.Collector
@@ -35,7 +34,7 @@ func main() {
 	showVersion := flag.Bool("version", false, "print version and exit")
 	flag.Parse()
 	if *showVersion {
-		fmt.Println("archon-monitor", version)
+		fmt.Println(version.Get("archon-monitor"))
 		return
 	}
 	if *interval <= 0 {
