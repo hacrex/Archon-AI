@@ -18,10 +18,8 @@ import (
 	"github.com/hacrex/Archon-AI/internal/auth"
 	"github.com/hacrex/Archon-AI/internal/provision"
 	"github.com/hacrex/Archon-AI/internal/store"
+	"github.com/hacrex/Archon-AI/internal/version"
 )
-
-// Version is overridden at build time with -ldflags.
-var Version = "0.0.1-dev"
 
 const maxJSONBody = 1 << 20
 const requestIDHeader = "X-Request-ID"
@@ -321,7 +319,7 @@ func (s *Server) readyz(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) version(w http.ResponseWriter, _ *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]string{"version": Version})
+	writeJSON(w, http.StatusOK, version.Get("archon-api"))
 }
 
 func (s *Server) projects(w http.ResponseWriter, r *http.Request) {

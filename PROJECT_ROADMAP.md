@@ -1,13 +1,104 @@
 # Archon AI — Step-by-Step Completion Roadmap
 
-**Vision:** *Supabase for AI applications.* A local-first, open-source control plane where developers get a Postgres + pgvector data layer, a Qdrant-backed vector search plane, an agent runtime (Python SDK), a CLI (`archon`), and a web dashboard — all orchestrated with one command: `archon dev`.
+## Vision
 
-**Guiding principles (inherited from Supabase's playbook):**
-1. **Paved-road first:** every phase below has a "Definition of Done" gate. Do not start the next phase until the current gate passes.
-2. **Local-first DX:** `archon init && archon dev` must always work end-to-end on a laptop in under 5 minutes.
-3. **Single binary distribution:** everything ships as `archon` CLI + Docker images; no manual multi-service wiring ever required of the user.
-4. **Postgres is home; vectors are a projection:** source-of-truth lives in Postgres outbox rows; Qdrant is reconciled, disposable, rebuildable.
-5. **Security/compliance are features, not afterthoughts:** each phase adds its share of the baseline.
+**Supabase for AI applications.**
+
+Developers building AI products today stitch together a dozen moving parts: a database, a vector store, an embedding pipeline, agent code, model API keys, secrets, queues, and observability — none of which speak to each other. Archon AI collapses all of that into **one coherent platform** with the same feel Supabase gave to the Postgres ecosystem:
+
+```bash
+archon init my-ai-app     # scaffold project (schema, agents, config)
+cd my-ai-app
+archon dev                # full stack on localhost in <5 minutes
+```
+
+What the developer gets, locally and (later) hosted:
+
+| Layer | Archon equivalent | Supabase analogue |
+|-------|-------------------|-------------------|
+| Relational data | Per-project Postgres + pgvector, migrations, SQL API, table editor | Postgres + Table Editor |
+| Vector search | Qdrant-backed collections with automatic sync from Postgres | *(new — AI-specific)* |
+| Agents | Python SDK + sandboxed runtime, HTTP/cron/event triggers | Edge Functions |
+| Models | OpenAI-compatible gateway with per-key metering & budgets | *(new — AI-specific)* |
+| Secrets & keys | Project-scoped API keys (anon / service-role), encrypted secrets vault | API Keys & Vault |
+| Local workflow | `archon dev`, `db push/pull/reset`, seeds | `supabase start`, `db push` |
+| Dashboard | Archon Studio: schema, vectors, agent runs, usage | Studio |
+| Scale-out path | Same manifests → Docker Compose → Kubernetes/Helm | Self-host → Cloud |
+
+**The pitch in one sentence:** *"If you can build a CRUD app on Supabase, you can build an agentic AI app on Archon — same ergonomics, plus vectors, agents, and models that stay in sync with your data."*
+
+Success looks like: a founder prototypes a RAG chatbot on a laptop Tuesday morning, deploys the identical manifests to their own VPS or our hosted cloud by Friday, and never rewrites application code between those two steps.
+
+---
+
+## Guiding Principles
+
+Five rules govern every phase below. When a design decision is contested, these settle it — in order of priority.
+
+### 1. Local-first DX
+The laptop *is* the primary environment; the cloud is just another deployment target.
+
+- `archon init && archon dev` must bring up the entire stack (Postgres+pgvector, Qdrant, control-plane API, dashboard, agent runtime) in **under 5 minutes**, offline-capable after first image pull.
+- Every feature that ships in the hosted/cloud form must first be usable locally through the exact same CLI commands and API surface. No "cloud-only" APIs until Phase 8 gates explicitly say otherwise.
+- Error messages in the CLI follow a fixed format: **what failed → why → the exact next command to run**. Developers should never need to read source code to debug their setup.
+- Seeding and reset are first-class: `archon db reset --seed` restores a deterministic state so demos, tests, and onboarding are reproducible.
+
+**Litmus test:** a new contributor clones the repo and has a working demo without asking a single question in chat.
+
+### 2. Single Binary
+Everything the platform does ships as one Go binary (`archon`) plus published container images.
+
+- `archon serve`, `archon dev`, `archon db`, `archon agent`, `archon migrate` — all subcommands of one artifact. No sidecar daemons, no separate "studio server," no manual service wiring ever demanded of the user.
+- Distribution: static binaries (linux/darwin × amd64/arm64) via `curl -fsSL https://get.archon.dev | sh`, Homebrew tap, and versioned Docker images. One `Makefile` target builds all three.
+- The binary embeds what it needs at runtime: default configs, the web dashboard assets (`go:embed`), and migration SQL. Version stamping via `-ldflags` so `archon version` always reports the exact build.
+- Multi-service orchestration (docker-compose generation, later Kubernetes manifests) is something the binary *produces*, never something the user hand-maintains.
+
+**Litmus test:** uninstalling Archon = deleting one binary and running `archon dev down`. Nothing else lingers.
+
+### 3. Postgres Is Home; Vectors Are a Projection
+Source of truth lives in Postgres. Qdrant is a derived, disposable index.
+
+- Any embedding-relevant row change writes an **outbox record in the same transaction**. An async reconciler pushes changes to Qdrant — never the other way around.
+- Qdrant collections can be wiped and rebuilt from Postgres at any time with zero downtime (build new collection → atomic alias swap). Losing the vector store is an availability blip, **never** data loss.
+- Embedding inputs, metadata filters, and ACL columns are declared once in schema/config; the projection pipeline derives everything from that declaration. No ad-hoc `upsert(vector=...)` paths that can drift from the relational state.
+- Consistency guarantees are explicit and documented: eventual (bounded lag, exposed as a metric + `archon db vectors status`), with an opt-in synchronous mode for small tables/tests.
+
+**Litmus test:** `docker compose stop qdrant && delete all collections && restart` → reconciliation rebuilds everything and search results match Postgres exactly.
+
+### 4. Gated Phases
+Progress moves through Definition-of-Done gates, not calendar dates.
+
+- Each phase (0–9 below) lists concrete deliverables and verification criteria. **The next phase does not start until the current gate passes** in CI, not by opinion.
+- Gates are machine-checkable wherever possible: integration suites against real Postgres/Qdrant (testcontainers), e2e smoke scripts, performance budgets (e.g., `dev up` < 5 min, p95 search < 100 ms), and coverage floors for core packages.
+- If a feature can't pass its gate, it stays behind a flag or is cut — it does not block the roadmap. Scope discipline beats heroics.
+- Later-phase temptations (NATS, gVisor, billing, K8s CRDs) are explicitly fenced until Phase 8; nothing jumps the queue because it's fun.
+
+**Litmus test:** at any moment, `todo.md` checkboxes + CI badges tell any stranger exactly which gate we're at — no tribal knowledge required.
+
+### 5. Security Is a Feature
+Every phase carries its share of the security baseline; none of it is deferred to a mythical "hardening sprint."
+
+- **Phase 1:** hashed, scoped API keys (anon vs service-role), rotation, encrypted secrets at rest, redaction in logs/responses.
+- **Phase 2–3:** per-project tenancy boundaries enforced at the adapter layer — a request can never touch another project's schema or collection, verified by automated IDOR tests.
+- **Phase 4:** agents execute in sandboxed subprocesses with CPU/memory/network caps, least-privilege tokens scoped to a single run, and full audit trails of every tool/model call.
+- **Phase 6+:** RBAC, rate limits, audit log, signed images + SBOM, SOC2-track controls before hosted GA.
+- Defaults are secure: bind to localhost in dev, no wildcard CORS, no `DEBUG` in release builds, dependency vulnerability scanning in CI on every PR.
+
+**Litmus test:** a pen-test-style checklist runs as part of CI; shipping a feature that fails it is as broken as failing a unit test.
+
+---
+
+## How the Principles Map to Phases
+
+| Principle | P0 | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 | P9 |
+|-----------|----|----|----|----|----|----|----|----|----|----|
+| Local-first DX | ● | ○ | ○ | ★ | ★ | ★ | ○ | ○ | ○ | ★ |
+| Single binary | ★ | ● | ● | ★ | ● | ● | ○ | ○ | ● | ● |
+| Postgres home / vectors projection |   | ● | ★ | ● | ● | ○ | ○ | ● | ● | ○ |
+| Gated phases | ★ | ★ | ★ | ★ | ★ | ★ | ★ | ★ | ★ | ★ |
+| Security is a feature | ● | ★ | ● | ● | ★ | ○ | ★ | ● | ★ | ● |
+
+★ = defining milestone for that principle · ● = substantial work · ○ = maintained, not extended
 
 ---
 
