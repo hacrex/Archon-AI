@@ -11,7 +11,7 @@ services:
       ARCHON_ORGANIZATION_ID: 00000000-0000-0000-0000-000000000001
       ARCHON_QDRANT_URL: http://qdrant:6333
       ARCHON_NATS_URL: nats://nats:4222
-    ports: ["8080:8080"]
+    ports: ["127.0.0.1:8080:8080"]
     depends_on:
       postgres:
         condition: service_healthy

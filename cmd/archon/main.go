@@ -30,8 +30,9 @@ Usage:
 	  install         create the product database and first administrator
 	  version         print CLI version
   bootstrap-user  create the first active user and organization owner
-  init            scaffold a new project        (planned)
-  dev             run the local emulator        (planned)
+	  init            scaffold a new project        (planned)
+	  dev             start the local Compose stack
+	  dev down        stop the local Compose stack
   db              manage vector databases       (planned)
   bucket          manage buckets                (planned)
   deploy          deploy an agent function      (planned)
@@ -64,7 +65,12 @@ func main() {
 			fmt.Fprintf(os.Stderr, "archon bootstrap-user: %v\n", err)
 			os.Exit(1)
 		}
-	case "init", "dev", "db", "bucket", "deploy", "logs":
+	case "dev":
+		if err := dev(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "archon dev: %v\n", err)
+			os.Exit(1)
+		}
+	case "init", "db", "bucket", "deploy", "logs":
 		fmt.Printf("archon %s: not implemented yet\n", os.Args[1])
 		os.Exit(2)
 	default:
