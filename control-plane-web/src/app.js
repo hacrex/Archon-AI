@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { login, me, logout, listProjects, createProject } from './api.js';
+import { login, me, logout, listProjects, listDatabases, listOrganizationMembers, createProject } from './api.js';
 import { modal } from './components.js';
 import { overview, projects, resources, operations, admin, audit, settings } from './routes.js';
 import { loginScreen, liveProjects } from './live-routes.js';
@@ -7,7 +7,7 @@ import { loginScreen, liveProjects } from './live-routes.js';
 export function boot() {
   const app = document.querySelector('#app');
   const crumb = document.querySelector('#page-crumb');
-  const pages = { overview: () => overview(state), projects: () => liveProjects(state), resources, operations, admin, audit, settings };
+  const pages = { overview: () => overview(state), projects: () => liveProjects(state), resources, operations, admin: () => admin(state), audit, settings };
 
   function render() {
     document.body.classList.toggle('auth-mode', !state.token);
@@ -31,6 +31,17 @@ export function boot() {
     try {
       state.projects = (await listProjects(state.token)).items || [];
       state.projectsError = '';
+      state.resources = state.projects.map((project) => ({
+        name: project.metadata?.name || 'Unnamed project',
+        type: 'Project',
+        status: project.status?.phase || 'Pending',
+        detail: `${project.spec?.environment || 'development'} · ${project.spec?.region || 'local'}`,
+      }));
+      if (state.projects.length > 0) {
+        await loadDatabases(state.projects[0].metadata.name);
+      } else {
+        state.databases = [];
+      }
     } catch (error) {
       if (error.status === 401) {
         state.token = '';
@@ -42,11 +53,54 @@ export function boot() {
     }
   }
 
+  async function loadDatabases(projectName) {
+    state.databasesLoading = true;
+    state.databasesError = '';
+    try {
+      state.databases = (await listDatabases(state.token, projectName)).items || [];
+      state.resources = [
+        ...state.resources.filter((resource) => resource.type !== 'DatabaseInstance'),
+        ...state.databases.map((database) => ({
+          name: database.metadata?.name || 'Unnamed database',
+          type: 'DatabaseInstance',
+          status: database.status?.phase || 'Pending',
+          detail: `${database.spec?.engine || 'unknown'} · ${database.spec?.plan || 'default'}`,
+        })),
+      ];
+    } catch (error) {
+      if (error.status === 401) {
+        state.token = '';
+        sessionStorage.removeItem('archon_token');
+      }
+      state.databases = [];
+      state.databasesError = error.message;
+    } finally {
+      state.databasesLoading = false;
+    }
+  }
+
+  async function loadMembers() {
+    state.membersLoading = true;
+    state.membersError = '';
+    try {
+      state.members = (await listOrganizationMembers(state.token)).items || [];
+    } catch (error) {
+      if (error.status === 401) {
+        state.token = '';
+        sessionStorage.removeItem('archon_token');
+      }
+      state.members = [];
+      state.membersError = error.message;
+    } finally {
+      state.membersLoading = false;
+    }
+  }
+
   async function loadSession() {
     if (!state.token) return render();
     try {
       state.user = await me(state.token);
-      await loadProjects();
+      await Promise.all([loadProjects(), loadMembers()]);
     } catch (error) {
       state.token = '';
       sessionStorage.removeItem('archon_token');

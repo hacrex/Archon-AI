@@ -23,6 +23,15 @@ type Membership struct {
 	CreatedAt    time.Time `json:"createdAt"`
 }
 
+type OrganizationMember struct {
+	UserID       string    `json:"userId"`
+	Email        string    `json:"email"`
+	DisplayName  string    `json:"displayName"`
+	Status       string    `json:"status"`
+	Role         string    `json:"role"`
+	CreatedAt    time.Time `json:"createdAt"`
+}
+
 type ProjectMembership struct {
 	Project     string    `json:"project"`
 	UserID      string    `json:"userId"`

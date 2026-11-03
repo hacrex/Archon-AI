@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/hacrex/Archon-AI/internal/api"
 	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
@@ -17,6 +18,35 @@ type AuthRepository interface {
 	Login(context.Context, string, string, time.Duration) (auth.Principal, auth.Session, string, error)
 	LookupSession(context.Context, string) (auth.Principal, auth.Session, error)
 	RevokeSession(context.Context, string) error
+}
+
+type OrganizationMembershipStore interface {
+	ListOrganizationMembers(context.Context, string) ([]api.OrganizationMember, error)
+}
+
+func (r *Repository) ListOrganizationMembers(ctx context.Context, organizationID string) ([]api.OrganizationMember, error) {
+	rows, err := r.db.QueryContext(ctx, `
+		SELECT u.id::text, u.email, u.display_name, u.status, om.role, om.created_at
+		FROM organization_memberships om
+		JOIN users u ON u.id = om.user_id
+		WHERE om.organization_id = $1::uuid
+		ORDER BY u.display_name, u.email`, organizationID)
+	if err != nil {
+		return nil, fmt.Errorf("list organization members: %w", err)
+	}
+	defer rows.Close()
+	members := []api.OrganizationMember{}
+	for rows.Next() {
+		var member api.OrganizationMember
+		if err := rows.Scan(&member.UserID, &member.Email, &member.DisplayName, &member.Status, &member.Role, &member.CreatedAt); err != nil {
+			return nil, fmt.Errorf("scan organization member: %w", err)
+		}
+		members = append(members, member)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate organization members: %w", err)
+	}
+	return members, nil
 }
 
 // Login verifies an active user's password and one membership in this

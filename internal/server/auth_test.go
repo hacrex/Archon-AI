@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/hacrex/Archon-AI/internal/api"
 	"github.com/hacrex/Archon-AI/internal/auth"
 )
 
@@ -17,6 +18,7 @@ type fakeAuthStore struct {
 	session   auth.Session
 	token     string
 	revoked   string
+	members   []api.OrganizationMember
 }
 
 func (f *fakeAuthStore) Login(_ context.Context, email, password string, _ time.Duration) (auth.Principal, auth.Session, string, error) {
@@ -39,6 +41,10 @@ func (f *fakeAuthStore) RevokeSession(_ context.Context, token string) error {
 	}
 	f.revoked = token
 	return nil
+}
+
+func (f *fakeAuthStore) ListOrganizationMembers(_ context.Context, _ string) ([]api.OrganizationMember, error) {
+	return f.members, nil
 }
 
 func TestLoginLogoutAndMe(t *testing.T) {
@@ -88,6 +94,30 @@ func TestBearerMiddlewareProtectsResources(t *testing.T) {
 	srv.Handler().ServeHTTP(authorized, request)
 	if authorized.Code == http.StatusUnauthorized {
 		t.Fatalf("valid token rejected: %s", authorized.Body.String())
+	}
+}
+
+func TestOrganizationMembersRequiresAuthentication(t *testing.T) {
+	store := &fakeAuthStore{
+		principal: auth.Principal{UserID: "user-1", Email: "user@example.com", Organization: "org-1", Role: auth.RoleOwner},
+		session:   auth.Session{ExpiresAt: time.Now().Add(time.Hour)},
+		token:     "valid",
+		members:   []api.OrganizationMember{{UserID: "user-1", Email: "user@example.com", DisplayName: "Owner", Status: "active", Role: "owner"}},
+	}
+	srv := New(store)
+
+	unauthorized := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(unauthorized, httptest.NewRequest(http.MethodGet, "/v1/organization/members", nil))
+	if unauthorized.Code != http.StatusUnauthorized {
+		t.Fatalf("missing token status = %d, body = %s", unauthorized.Code, unauthorized.Body.String())
+	}
+
+	authorized := httptest.NewRecorder()
+	request := httptest.NewRequest(http.MethodGet, "/v1/organization/members", nil)
+	request.Header.Set("Authorization", "Bearer valid")
+	srv.Handler().ServeHTTP(authorized, request)
+	if authorized.Code != http.StatusOK || !strings.Contains(authorized.Body.String(), "Owner") {
+		t.Fatalf("member list status = %d, body = %s", authorized.Code, authorized.Body.String())
 	}
 }
 

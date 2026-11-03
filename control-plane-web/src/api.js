@@ -7,7 +7,7 @@ async function request(path, options = {}) {
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(body.message || `API request failed (${response.status})`);
+    const error = new Error(body.error || body.message || `API request failed (${response.status})`);
     error.status = response.status;
     error.body = body;
     throw error;
@@ -29,6 +29,19 @@ export function logout(token) {
 
 export function listProjects(token) {
   return request('/v1/projects', { headers: { Authorization: `Bearer ${token}` } });
+}
+
+export function listDatabases(token, projectName) {
+  const encodedProject = encodeURIComponent(projectName);
+  return request(`/v1/projects/${encodedProject}/databases`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export function listOrganizationMembers(token) {
+  return request('/v1/organization/members', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
 
 export function createProject(token, project) {

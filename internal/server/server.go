@@ -113,6 +113,7 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("/v1/auth/login", s.login)
 	s.mux.HandleFunc("/v1/auth/logout", s.logout)
 	s.mux.HandleFunc("/v1/auth/me", s.me)
+	s.mux.HandleFunc("/v1/organization/members", s.organizationMembers)
 	s.mux.HandleFunc("/v1/projects", s.projects)
 	s.mux.HandleFunc("/v1/projects/", s.projectRoutes)
 }
@@ -185,6 +186,29 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, principal)
+}
+
+func (s *Server) organizationMembers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		methodNotAllowed(w, http.MethodGet)
+		return
+	}
+	principal, ok := principalFromContext(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "unauthorized", "a valid bearer token is required")
+		return
+	}
+	memberships, configured := s.store.(store.OrganizationMembershipStore)
+	if !configured {
+		writeError(w, http.StatusServiceUnavailable, "organization_membership_unavailable", "organization membership storage is not configured")
+		return
+	}
+	members, err := memberships.ListOrganizationMembers(r.Context(), principal.Organization)
+	if err != nil {
+		s.writeStoreError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"items": members})
 }
 
 type principalContextKey struct{}
