@@ -1,4 +1,4 @@
-.PHONY: build run install bootstrap-user test fmt fmt-check up down
+.PHONY: build run install bootstrap-user test test-sdk fmt fmt-check up down
 
 build:
 	go build -o bin/archon-api ./cmd/archon-api
@@ -15,6 +15,9 @@ bootstrap-user:
 
 test:
 	go test ./...
+
+test-sdk:
+	python3 -m unittest discover -s sdk/python/tests -p 'test_*.py' -v
 
 fmt:
 	gofmt -w $$(find . -type f -name '*.go' -not -path './vendor/*')
