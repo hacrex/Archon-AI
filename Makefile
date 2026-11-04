@@ -1,4 +1,4 @@
-.PHONY: build run install bootstrap-user test test-sdk fmt fmt-check up down
+.PHONY: build run install bootstrap-user doctor test test-sdk fmt fmt-check up down
 
 build:
 	go build -o bin/archon-api ./cmd/archon-api
@@ -12,7 +12,8 @@ install:
 
 bootstrap-user:
 	go run ./cmd/archon bootstrap-user $(ARGS)
-
+doctor:
+	go run ./cmd/archon doctor $(ARGS)
 test:
 	go test ./...
 

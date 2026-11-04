@@ -29,7 +29,8 @@ Usage:
 	Commands:
 	  install         create the product database and first administrator
 	  version         print CLI version
-  bootstrap-user  create the first active user and organization owner
+	  doctor          check local prerequisites and workspace readiness
+	  bootstrap-user  create the first active user and organization owner
 	  init            scaffold a new project        (planned)
 	  dev             start the local Compose stack
 	  dev down        stop the local Compose stack
@@ -63,6 +64,11 @@ func main() {
 	case "bootstrap-user":
 		if err := bootstrapUser(os.Args[2:]); err != nil {
 			fmt.Fprintf(os.Stderr, "archon bootstrap-user: %v\n", err)
+			os.Exit(1)
+		}
+	case "doctor":
+		if err := doctor(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "archon doctor: %v\n", err)
 			os.Exit(1)
 		}
 	case "dev":

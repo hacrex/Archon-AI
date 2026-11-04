@@ -4,7 +4,7 @@
 
 Archon AI is a self-hostable AI cloud platform. It brings the developer experience of Appwrite and Supabase to AI infrastructure: one install, one API, one CLI, one dashboard, and one auth model for vector databases, storage, agent functions, model connections, tools, and knowledge workflows.
 
-> Status: foundation and preview stage. Project/DatabaseInstance APIs, PostgreSQL persistence, Qdrant provisioning, authentication, first-user bootstrap, student K3s tooling, and a local dashboard preview exist. Storage, model connections, agent functions, tools, and knowledge workflows remain in development. Start with the [New User Guide](docs/NEW_USER_GUIDE.md).
+> Status: Local Developer Preview moving toward a Public Developer Preview. Project/DatabaseInstance APIs, PostgreSQL persistence, Qdrant provisioning, authentication, first-user bootstrap, local lifecycle commands, and Python HTTP bindings exist. Agent execution, storage, tools, knowledge workflows, and production isolation remain limited or in development. Read the [Public Developer Preview Contract](docs/PUBLIC_DEVELOPER_PREVIEW_CONTRACT.md) before evaluating the product.
 
 ## Why Archon AI
 
@@ -18,8 +18,8 @@ Archon AI is a self-hostable AI cloud platform. It brings the developer experien
 
 ## Core components
 
-- **Vector Database Hosting**: Qdrant (default), Chroma (dev and small workloads), Weaviate, Milvus, pgvector, and optionally ScyllaDB, packaged as Engine Packages.
-- **Agent Functions**: serverless agents on gVisor by default, Firecracker or Kata microVMs for untrusted code.
+- **Vector Database Hosting**: Qdrant is the only supported engine in the current developer preview; additional engines are planned or unsupported.
+- **Agent Functions**: trusted local Python agent bindings in preview; gVisor or microVM isolation is planned and must not be inferred from the current SDK.
 - **Storage**: S3-compatible object storage (SeaweedFS by default) with a model registry and dataset versioning.
 - **Model Gateway**: OpenAI-compatible endpoint in front of vLLM, Ollama and optional external providers.
 - **Planned**: knowledge (RAG) pipelines, tracing and evals, guardrails and approvals, MCP hosting, budgets, and richer model integrations.
@@ -34,7 +34,7 @@ archon-ai/
   internal/api/            v1 resource types
   api/v1/examples/         example manifests
   engines/                 Engine Packages (qdrant, chroma, pgvector)
-  sdk/python/              Python SDK (stubs)
+  sdk/python/              Python SDK HTTP/vector/model bindings
   examples/support-agent/  sample agent function
   deploy/                  Dockerfile, docker-compose, Helm chart
   docs/                    Technical Design Document
@@ -42,24 +42,23 @@ archon-ai/
 
 ## Quick start (dev preview)
 
-Requirements: Go 1.22 or newer, Docker with Compose.
+Requirements: Go 1.22 or newer, Docker with Compose, and Python 3.10+ for agents.
 
 ```bash
-# install the product database and first owner admin
+# check the host before starting
+go run ./cmd/archon doctor
+
+# start the dev stack (API, Postgres, NATS, Qdrant)
+go run ./cmd/archon dev
+
+# create the first local owner after the stack is ready
+export ARCHON_DB_URL='postgres://archon:archon@127.0.0.1:5432/archon?sslmode=disable'
 printf '%s\n' 'replace-with-a-strong-local-password' | \
-  go run ./cmd/archon install \
-    --database-url 'postgres://archon:archon@127.0.0.1:5432/archon?sslmode=disable' \
-    --admin-email admin@example.com --password-stdin
+  go run ./cmd/archon bootstrap-user \
+    --email owner@example.com --display-name 'Local Owner' --password-stdin
 
-# run the API locally
-make run
-curl localhost:8080/healthz
-curl localhost:8080/livez
-curl localhost:8080/readyz
-curl localhost:8080/v1/auth/me -H 'Authorization: Bearer <token>'
-
-# or run the dev stack (API, Postgres, NATS, Qdrant), then run `archon install`
-make up
+# stop the stack; add --volumes only when deleting local data is intentional
+go run ./cmd/archon dev down
 ```
 
 The API binds to `127.0.0.1:8080` by default. Set `ARCHON_API_ADDR` explicitly when exposing it beyond the local host. `/livez` checks the process; `/readyz` also requires the configured resource store to be reachable. With PostgreSQL configured, `POST /v1/auth/login` issues an opaque bearer token, `POST /v1/auth/logout` revokes it, and resource routes require a valid bearer token.
@@ -138,6 +137,11 @@ See [Self-hosting Requirements](docs/self-hosting-requirements.md) for the stude
 ## Documentation
 
 - [Technical Design Document](docs/technical-design-document.md): architecture, engine comparison, security, deployment, roadmap.
+- [Developer Guide](docs/DEVELOPER_GUIDE.md): local lifecycle and Python agent bindings.
+- [Public Developer Preview Contract](docs/PUBLIC_DEVELOPER_PREVIEW_CONTRACT.md): supported capabilities and non-goals.
+- [Capability Status Registry](docs/CAPABILITY_STATUS.md): Available, Preview, Planned, Unsupported, and Degraded labels.
+- [Public Preview Release Gates](docs/PUBLIC_PREVIEW_RELEASE_GATES.md): release approval checklist.
+- [Local-to-Public Preview Roadmap](docs/ROADMAP_LOCAL_TO_PUBLIC_PREVIEW.md): phased tasks and acceptance criteria.
 - [Architecture Diagram](docs/ARCHITECTURE.md): control plane, data plane, provisioning flow, identity foundation, and security boundaries.
 - [Authentication Foundation](docs/authentication-authorization-foundation.md): password, session, role, and authorization primitives.
 - [Project Authorization](docs/project-authorization.md): project memberships, role matrix, middleware policy, and PostgreSQL configuration.
