@@ -18,6 +18,11 @@ var ErrNotFound = errors.New("resource not found")
 var ErrProjectNotEmpty = errors.New("project has active database instances")
 var ErrForbidden = errors.New("project access denied")
 
+// ErrGenerationConflict is returned when an update supplies an expected
+// generation (via If-Match / metadata.generation) that no longer matches the
+// stored resource. Callers must re-read the resource before retrying.
+var ErrGenerationConflict = errors.New("resource was modified concurrently; expected generation does not match")
+
 // ProjectAuthorizer is the persistence contract used by the HTTP middleware.
 // Organization owners/admins are resolved as implicit project administrators;
 // all other access comes from project_memberships.
@@ -382,11 +387,17 @@ func (r *Repository) UpdateProject(ctx context.Context, name string, project *ap
 	}
 	defer tx.Rollback()
 	var id string
-	if err := tx.QueryRowContext(ctx, `SELECT id::text FROM projects WHERE organization_id = $1 AND name = $2 AND deleted_at IS NULL FOR UPDATE`, r.organizationID, name).Scan(&id); err != nil {
+	var currentGeneration int64
+	if err := tx.QueryRowContext(ctx, `SELECT id::text, generation FROM projects WHERE organization_id = $1 AND name = $2 AND deleted_at IS NULL FOR UPDATE`, r.organizationID, name).Scan(&id, &currentGeneration); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrNotFound
 		}
 		return fmt.Errorf("find project: %w", err)
+	}
+	// Optimistic concurrency: when the caller supplies an expected generation
+	// (metadata.generation from a prior read / If-Match), reject stale writes.
+	if project.Metadata.Generation > 0 && project.Metadata.Generation != currentGeneration {
+		return ErrGenerationConflict
 	}
 	var generation int64
 	var updatedAt time.Time
@@ -559,13 +570,19 @@ func (r *Repository) UpdateDatabaseInstance(ctx context.Context, projectName, na
 	}
 	defer tx.Rollback()
 	var id string
+	var currentGeneration int64
 	if err := tx.QueryRowContext(ctx, `
-		SELECT d.id::text FROM database_instances d JOIN projects p ON p.id = d.project_id
-		WHERE p.organization_id = $1 AND p.name = $2 AND d.name = $3 AND d.deleted_at IS NULL FOR UPDATE`, r.organizationID, projectName, name).Scan(&id); err != nil {
+		SELECT d.id::text, d.generation FROM database_instances d JOIN projects p ON p.id = d.project_id
+		WHERE p.organization_id = $1 AND p.name = $2 AND d.name = $3 AND d.deleted_at IS NULL FOR UPDATE`, r.organizationID, projectName, name).Scan(&id, &currentGeneration); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrNotFound
 		}
 		return fmt.Errorf("find database instance: %w", err)
+	}
+	// Optimistic concurrency: reject stale writes when the caller supplies an
+	// expected generation (metadata.generation from a prior read / If-Match).
+	if instance.Metadata.Generation > 0 && instance.Metadata.Generation != currentGeneration {
+		return ErrGenerationConflict
 	}
 	var generation int64
 	var updatedAt time.Time

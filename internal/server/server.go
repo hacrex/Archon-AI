@@ -2,8 +2,10 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -85,7 +87,143 @@ func NewWithProvisioner(repository ResourceStore, qdrant *provision.Qdrant) *Ser
 
 // Handler returns the server with request ID and structured access-log middleware.
 func (s *Server) Handler() http.Handler {
-	return requestLogging(withRequestID(cors(s.authenticate(s.authorize(s.mux)))))
+	return requestLogging(withRequestID(cors(s.idempotency(s.authenticate(s.authorize(s.mux))))))
+}
+
+// IdempotencyStore persists idempotent mutation results for a principal scope.
+type IdempotencyStore interface {
+	// Begin reserves (scope, key). It returns replay=true when the key is
+	// already known (completed or in flight) along with its stored request
+	// hash and, when completed, the recorded response; reserved=false means
+	// another request holds the key in flight right now.
+	Begin(ctx context.Context, scope, key, requestHash string) (replay bool, reserved bool, record IdempotencyRecord, err error)
+	// Complete stores the successful response for later replays.
+	Complete(ctx context.Context, scope, key string, status int, body []byte) error
+	// Release removes an incomplete reservation so the client can retry.
+	Release(ctx context.Context, scope, key string) error
+}
+
+// IdempotencyRecord is the stored state of one idempotency key.
+type IdempotencyRecord struct {
+	RequestHash   string
+	Completed     bool
+	ResponseStatus int
+	ResponseBody  []byte
+}
+
+const idempotencyKeyHeader = "Idempotency-Key"
+
+func validIdempotencyKey(key string) bool {
+	if len(key) < 8 || len(key) > 128 {
+		return false
+	}
+	for i := 0; i < len(key); i++ {
+		c := key[i]
+		if !(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '-' || c == '_' || c == '.') {
+			return false
+		}
+	}
+	return true
+}
+
+func requestHashOf(r *http.Request, body []byte) string {
+	digest := sha256.Sum256(append([]byte(r.Method+" "+r.URL.Path+"\n"), body...))
+	return hex.EncodeToString(digest[:])
+}
+
+// readBody buffers up to maxJSONBody+1 bytes of the request body and restores
+// it for downstream handlers.
+func readBody(r *http.Request) ([]byte, error) {
+	body, err := io.ReadAll(io.LimitReader(r.Body, maxJSONBody+1))
+	if err != nil {
+		return nil, err
+	}
+	_ = r.Body.Close()
+	r.Body = io.NopCloser(bytes.NewReader(body))
+	return body, nil
+}
+
+// captureWriter records the status code and body while passing them through.
+type captureWriter struct {
+	http.ResponseWriter
+	status int
+	body   bytes.Buffer
+}
+
+func (c *captureWriter) WriteHeader(status int) {
+	if c.status == 0 {
+		c.status = status
+		c.ResponseWriter.WriteHeader(status)
+	}
+}
+
+func (c *captureWriter) Write(data []byte) (int, error) {
+	if c.status == 0 {
+		c.WriteHeader(http.StatusOK)
+	}
+	c.body.Write(data)
+	return c.ResponseWriter.Write(data)
+}
+
+// idempotency applies the Idempotency-Key protocol to POST mutations under
+// /v1/. It requires the store to implement IdempotencyStore; otherwise keys
+// are ignored (matching previous behaviour).
+func (s *Server) idempotency(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		store, configured := s.store.(IdempotencyStore)
+		key := strings.TrimSpace(r.Header.Get(idempotencyKeyHeader))
+		if !configured || key == "" || r.Method != http.MethodPost || !strings.HasPrefix(r.URL.Path, "/v1/") || r.URL.Path == "/v1/auth/login" {
+			next.ServeHTTP(w, r)
+			return
+		}
+		if !validIdempotencyKey(key) {
+			writeError(w, http.StatusBadRequest, "invalid_idempotency_key", "Idempotency-Key must be 8-128 characters from [A-Za-z0-9._-]")
+			return
+		}
+		body, err := readBody(r)
+		if err != nil {
+			writeError(w, http.StatusBadRequest, "invalid_request", "could not read request body")
+			return
+		}
+		scope := "anonymous"
+		if principal, ok := principalFromContext(r.Context()); ok {
+			scope = principal.UserID
+		}
+		hash := requestHashOf(r, body)
+		replay, reserved, record, err := store.Begin(r.Context(), scope, key, hash)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "internal_error", "idempotency lookup failed")
+			return
+		}
+		if replay {
+			if record.RequestHash != hash {
+				writeError(w, http.StatusConflict, "idempotency_key_reuse", "this idempotency key was already used for a different request")
+				return
+			}
+			if !record.Completed {
+				writeError(w, http.StatusConflict, "idempotency_in_progress", "a request with this idempotency key is still in progress")
+				return
+			}
+			w.Header().Set("Idempotent-Replay", "true")
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(record.ResponseStatus)
+			_, _ = w.Write(record.ResponseBody)
+			return
+		}
+		if !reserved {
+			writeError(w, http.StatusConflict, "idempotency_in_progress", "a request with this idempotency key is still in progress")
+			return
+		}
+		capture := &captureWriter{ResponseWriter: w}
+		next.ServeHTTP(capture, r)
+		if capture.status >= 200 && capture.status < 300 {
+			if err := store.Complete(r.Context(), scope, key, capture.status, capture.body.Bytes()); err != nil {
+				log.Printf("idempotency completion failed for %s/%s: %v", scope, key, err)
+			}
+			return
+		}
+		_ = store.Release(r.Context(), scope, key)
+	})
 }
 
 func cors(next http.Handler) http.Handler {
@@ -653,6 +791,8 @@ func (s *Server) writeStoreError(w http.ResponseWriter, err error) {
 		writeForbidden(w, err.Error())
 	case errors.Is(err, store.ErrProjectNotEmpty):
 		writeError(w, http.StatusConflict, "project_not_empty", err.Error())
+	case errors.Is(err, store.ErrGenerationConflict):
+		writeError(w, http.StatusPreconditionFailed, "generation_conflict", err.Error())
 	default:
 		writeError(w, http.StatusInternalServerError, "internal_error", "resource operation failed")
 	}
